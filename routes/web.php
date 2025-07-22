@@ -24,6 +24,11 @@ Route::post('add-persyaratan', [PersyaratanController::class, 'store'])->name('p
 
 Route::delete('/persyaratan/{id}', [PersyaratanController::class, 'destroy']);
 
+Route::get('/persyaratan/data', [PersyaratanController::class, 'getAll']);
+
+Route::get('persyaratan/{id}/edit', [PersyaratanController::class, 'edit']);
+Route::put('persyaratan/{id}', [PersyaratanController::class, 'update']);
+
 
 // Route::get('/', function () {
 //     return view('dashboard');

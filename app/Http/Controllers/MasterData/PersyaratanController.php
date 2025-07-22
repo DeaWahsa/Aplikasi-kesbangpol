@@ -6,27 +6,27 @@ use App\Http\Controllers\Controller;
 use App\Models\M_persyaratan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\DataTables as DataTablesDataTables;
 use Yajra\DataTables\Facades\DataTables;
 
 class PersyaratanController extends Controller
 {
     public function index(Request $request)
     {
+        $menu = "masterdata";
+        $submenu = "persyaratan";
         if ($request->ajax()) {
             $data = M_persyaratan::latest()->get();
-            return Datatables::of($data)
+            return DataTablesDataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function($row){
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editPersyaratan">Edit</a>';
-                    $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deletePersyaratan">Delete</a>';
+                ->addColumn('action', function ($row) {
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editPersyaratan">Edit</a>';
+                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deletePersyaratan">Delete</a>';
                     return $btn;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
         }
-
-        $menu = "masterdata";
-        $submenu = "persyaratan";
         return view('masterdata.persyaratan', compact('menu', 'submenu'));
     }
 
@@ -62,8 +62,7 @@ class PersyaratanController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama_persyaratan' => 'required',
-            'keterangan' => 'required'
+            'nama_persyaratan' => 'required'
         ]);
 
         $persyaratan = M_persyaratan::findOrFail($id);
@@ -79,20 +78,22 @@ class PersyaratanController extends Controller
         return response()->json(['success' => 'Data berhasil dihapus.']);
     }
 
-    // public function getAll(Request $request)
-    // {
-    //     $data = M_persyaratan::query();
+    public function getAll(Request $request)
+    {
+        $data = M_persyaratan::query();
 
-    //     // Jika ada input pencarian nama_persyaratan
-    //     if ($request->has('nama_persyaratan') && $request->nama_persyaratan != '') {
-    //         $data->where('nama_persyaratan', 'like', '%' . $request->nama_persyaratan . '%');
-    //     } else {
-    //         // Jika kosong, jangan tampilkan data
-    //         $data->whereRaw('1 = 0');
-    //     }
+        // Jika ada input pencarian nama_persyaratan
+        if ($request->has('nama_persyaratan') && $request->nama_persyaratan != '') {
+            $data->where('nama_persyaratan', 'like', '%' . $request->nama_persyaratan . '%');
+        } else {
+            // Jika kosong, jangan tampilkan data
+            $data->whereRaw('1 = 0');
+        }
 
-    //     return DataTables::of($data)
-    //         ->addIndexColumn()
-    //         ->make(true);
-    // }
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->make(true);
+
+        dd($data);
+    }
 }

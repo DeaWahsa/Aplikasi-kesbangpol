@@ -11,4 +11,6 @@ class M_persyaratan extends Model
     protected $table = 'tabel_persyaratan';
     protected $primaryKey = 'id';
     protected $guarded = ['id'];
+    protected $fillable = ['nama_persyaratan'];
+
 }

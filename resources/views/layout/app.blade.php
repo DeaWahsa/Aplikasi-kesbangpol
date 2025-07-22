@@ -29,6 +29,12 @@
     <!-- Template Main CSS File -->
     <link href="{{asset('/')}}assets/css/style.css" rel="stylesheet">
 
+    <!-- DataTables CSS -->
+<link href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css" rel="stylesheet">
+
+
+
+
     <!-- =======================================================
   * Template Name: NiceAdmin
   * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
@@ -324,6 +330,7 @@
     <!-- Template Main JS File -->
     <script src="{{asset('/')}}assets/js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.min.js"></script>
 
     @yield('scripts')
 

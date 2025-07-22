@@ -7,9 +7,9 @@
       <div class="card-body">
         <h5 class="card-title">Datatables</h5>
         <p><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Tambah Persyaratan</button></p>
-        
+
         <!-- Table with stripped rows -->
-        <table class="table table-bordered data-table">
+        <table id="tabel-persyaratan" class="display" style="width:100%">
           <thead>
             <tr>
               <th>No</th>
@@ -41,6 +41,7 @@
           <div class="row mb-3">
             <label for="inputText" class="col-sm-2 col-form-label">Nama Persyaratan</label>
             <div class="col-sm-10">
+              <input type="hidden" class="form-control" id="id">
               <input type="text" class="form-control" id="inputText">
             </div>
           </div>
@@ -58,42 +59,32 @@
 
 @section('scripts')
 <script>
-  function loadData() {
-    $.ajax({
-      url: '{{ route("persyaratan.index") }}',
-      type: 'GET',
-      dataType: 'json',
-      success: function(response) {
-        let rows = '';
-        response.data.forEach(function(item, index) {
-          rows += `
-            <tr>
-              <td>${index + 1}</td>
-              <td>${item.nama_persyaratan}</td>
-              <td>
-                <button onclick="hapus(${item.id})" class="btn btn-danger btn-sm">
-                  <i class="bi bi-trash"></i> Hapus
-                </button>
-              </td>
-            </tr>
-          `;
-        });
-        $('#tabel-persyaratan tbody').html(rows);
-      },
-      error: function(xhr, status, error) {
-        console.error('Error:', error);
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Gagal memuat data!"
-        });
-      }
+  $(document).ready(function() {
+    // Inisialisasi DataTables
+    var table = $('#tabel-persyaratan').DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: '{{ route("persyaratan.index") }}',
+      columns: [{
+          data: 'DT_RowIndex',
+          name: 'DT_RowIndex',
+          orderable: false,
+          searchable: false
+        },
+        {
+          data: 'nama_persyaratan',
+          name: 'nama_persyaratan'
+        },
+        {
+          data: 'action',
+          name: 'action',
+          orderable: false,
+          searchable: false
+        }
+      ]
     });
-  }
 
-  $(document).ready(function () {
-    loadData(); // muat data saat awal
-
+    // Submit form tambah
     $('#formPersyaratan').on('submit', function(e) {
       e.preventDefault();
 
@@ -107,7 +98,7 @@
         success: function(response) {
           $('#staticBackdrop').modal('hide');
           $('#formPersyaratan')[0].reset();
-          loadData(); // refresh data
+          table.ajax.reload(); // refresh data
           Swal.fire({
             title: "Berhasil!",
             text: "Data berhasil disimpan.",
@@ -123,33 +114,70 @@
         }
       });
     });
-  });
+    $('body').on('click', '.deletePersyaratan', function() {
+      let id = $(this).data("id");
 
-  function hapus(id) {
-    Swal.fire({
-      title: "Yakin ingin menghapus?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Ya, hapus",
-      cancelButtonText: "Batal"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        $.ajax({
-          url: '{{ url("persyaratan") }}/' + id,
-          type: 'DELETE',
-          data: {
-            _token: '{{ csrf_token() }}'
-          },
-          success: function(response) {
-            loadData();
-            Swal.fire("Berhasil!", "Data berhasil dihapus.", "success");
-          },
-          error: function(xhr) {
-            Swal.fire("Gagal!", "Data gagal dihapus.", "error");
-          }
-        });
-      }
+      Swal.fire({
+        title: "Yakin ingin menghapus?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Ya, hapus",
+        cancelButtonText: "Batal"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: '{{ url("persyaratan") }}/' + id,
+            type: 'DELETE',
+            data: {
+              _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+              $('#tabel-persyaratan').DataTable().ajax.reload(); // refresh datatable
+              Swal.fire("Berhasil!", "Data berhasil dihapus.", "success");
+            },
+            error: function(xhr) {
+              Swal.fire("Gagal!", "Data gagal dihapus.", "error");
+            }
+          });
+        }
+      });
     });
-  }
+    $('body').on('click', '.editPersyaratan', function() {
+      var id = $(this).data('id');
+      $.get("{{ url('persyaratan') }}/" + id + "/edit", function(data) {
+        $('#modalLabel').text("Edit Persyaratan");
+        $('#staticBackdrop').modal('show');
+        $('#id').val(data.id);
+        $('#inputText').val(data.nama_persyaratan);
+      });
+    });
+    $('#formPersyaratan').on('submit', function(e) {
+      e.preventDefault();
+
+      var id = $('#id').val();
+      var url = id ? '{{ url("persyaratan") }}/' + id : '{{ url("add-persyaratan") }}';
+      var type = id ? 'PUT' : 'POST';
+
+      $.ajax({
+        url: url,
+        type: type,
+        data: {
+          _token: '{{ csrf_token() }}',
+          _method: type,
+          nama_persyaratan: $('#inputText').val()
+        },
+        success: function(response) {
+          $('#staticBackdrop').modal('hide');
+          $('#formPersyaratan')[0].reset();
+          $('#id').val('');
+          $('#tabel-persyaratan').DataTable().ajax.reload();
+          Swal.fire("Berhasil!", "Data berhasil disimpan.", "success");
+        },
+        error: function(xhr) {
+          Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+        }
+      });
+    });
+  });
 </script>
 @endsection
