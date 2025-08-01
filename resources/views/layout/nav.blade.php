@@ -21,19 +21,22 @@
     </li><!-- End Components Nav -->
 
     <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
             <i class="bi bi-journal-text"></i><span>Pendaftaran</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
-        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
             <li>
-                <a href="forms-elements.html">
+                <a href="{{url('form-pendaftaran')}}">
                     <i class="bi bi-circle"></i><span>Form Pendaftaran</span>
                 </a>
             </li>
-        </ul>
-        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
             <li>
-                <a href="forms-elements.html">
+                <a href="{{url('daftar-pendaftaran')}}">
+                    <i class="bi bi-circle"></i><span>Daftar Pendaftaran</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{url('formpendaftaran')}}">
                     <i class="bi bi-circle"></i><span>Verifikasi Pendaftaran</span>
                 </a>
             </li>

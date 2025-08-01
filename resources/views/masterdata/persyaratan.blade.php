@@ -84,38 +84,51 @@
       ]
     });
 
-    // Submit form tambah
-    $('#formPersyaratan').on('submit', function(e) {
+    // Submit form tambah/edit
+    $('#formPersyaratan').off('submit').on('submit', function(e) {
       e.preventDefault();
 
+      var id = $('#id').val(); // Hidden input ID
+      var url = id ? `{{ url('persyaratan') }}/${id}` : `{{ url('persyaratan') }}`;
+      var method = id ? 'PUT' : 'POST';
+
       $.ajax({
-        url: '{{ url("add-persyaratan") }}',
-        type: 'POST',
+        url: url,
+        type: 'POST', // Laravel expects POST with _method spoofing for PUT
         data: {
           _token: '{{ csrf_token() }}',
+          _method: method,
           nama_persyaratan: $('#inputText').val()
         },
+
         success: function(response) {
           $('#staticBackdrop').modal('hide');
           $('#formPersyaratan')[0].reset();
-          table.ajax.reload(); // refresh data
-          Swal.fire({
-            title: "Berhasil!",
-            text: "Data berhasil disimpan.",
-            icon: "success"
-          });
+          $('#id').val('');
+          table.ajax.reload();
+
+          Swal.fire("Berhasil!", "Data berhasil disimpan.", "success");
         },
         error: function(xhr) {
-          Swal.fire({
-            icon: "error",
-            title: "Gagal!",
-            text: xhr.responseJSON?.message || "Inputan tidak boleh kosong!"
-          });
+          Swal.fire("Gagal!", xhr.responseJSON?.message || "Inputan Tidak Boleh Kosong!", "error");
         }
       });
     });
+
+    // Tombol edit
+    $('body').on('click', '.editPersyaratan', function() {
+      var id = $(this).data('id');
+      $.get(`{{ url('persyaratan') }}/${id}/edit`, function(data) {
+        $('#modalLabel').text("Edit Persyaratan");
+        $('#staticBackdrop').modal('show');
+        $('#id').val(data.id);
+        $('#inputText').val(data.nama_persyaratan);
+      });
+    });
+
+    // Tombol hapus
     $('body').on('click', '.deletePersyaratan', function() {
-      let id = $(this).data("id");
+      var id = $(this).data("id");
 
       Swal.fire({
         title: "Yakin ingin menghapus?",
@@ -126,55 +139,19 @@
       }).then((result) => {
         if (result.isConfirmed) {
           $.ajax({
-            url: '{{ url("persyaratan") }}/' + id,
+            url: `{{ url('persyaratan') }}/${id}`,
             type: 'DELETE',
             data: {
               _token: '{{ csrf_token() }}'
             },
             success: function(response) {
-              $('#tabel-persyaratan').DataTable().ajax.reload(); // refresh datatable
+              table.ajax.reload();
               Swal.fire("Berhasil!", "Data berhasil dihapus.", "success");
             },
-            error: function(xhr) {
+            error: function() {
               Swal.fire("Gagal!", "Data gagal dihapus.", "error");
             }
           });
-        }
-      });
-    });
-    $('body').on('click', '.editPersyaratan', function() {
-      var id = $(this).data('id');
-      $.get("{{ url('persyaratan') }}/" + id + "/edit", function(data) {
-        $('#modalLabel').text("Edit Persyaratan");
-        $('#staticBackdrop').modal('show');
-        $('#id').val(data.id);
-        $('#inputText').val(data.nama_persyaratan);
-      });
-    });
-    $('#formPersyaratan').on('submit', function(e) {
-      e.preventDefault();
-
-      var id = $('#id').val();
-      var url = id ? '{{ url("persyaratan") }}/' + id : '{{ url("add-persyaratan") }}';
-      var type = id ? 'PUT' : 'POST';
-
-      $.ajax({
-        url: url,
-        type: type,
-        data: {
-          _token: '{{ csrf_token() }}',
-          _method: type,
-          nama_persyaratan: $('#inputText').val()
-        },
-        success: function(response) {
-          $('#staticBackdrop').modal('hide');
-          $('#formPersyaratan')[0].reset();
-          $('#id').val('');
-          $('#tabel-persyaratan').DataTable().ajax.reload();
-          Swal.fire("Berhasil!", "Data berhasil disimpan.", "success");
-        },
-        error: function(xhr) {
-          Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
         }
       });
     });

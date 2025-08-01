@@ -28,9 +28,12 @@
 
     <!-- Template Main CSS File -->
     <link href="{{asset('/')}}assets/css/style.css" rel="stylesheet">
+    <!-- Add this in the <head> section of your main layout -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
 
     <!-- DataTables CSS -->
-<link href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css" rel="stylesheet">
 
 
 
@@ -284,7 +287,7 @@
 
     <main id="main" class="main">
 
-        <div class="pagetitle">
+        <!-- <div class="pagetitle">
             <h1>Dashboard</h1>
             <nav>
                 <ol class="breadcrumb">
@@ -292,7 +295,7 @@
                     <li class="breadcrumb-item active">Dashboard</li>
                 </ol>
             </nav>
-        </div><!-- End Page Title -->
+        </div>End Page Title -->
 
         <section class="section dashboard">
             @yield('content')
