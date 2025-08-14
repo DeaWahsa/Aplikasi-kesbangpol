@@ -28,3 +28,9 @@ Route::resource('daftar-pendaftaran', DaftarPendaftaranController::class);
 
 // Route::get('file-persyaratan/{id}', FilePersyaratanController::class, 'index');
 Route::get('/file-persyaratan/{id}', [FilePersyaratanController::class, 'index'])->name('file-persyaratan.show');
+
+Route::post('/upload-file-persyaratan/{id}', [FilePersyaratanController::class, 'store'])->name('file-persyaratan.store');
+
+Route::resource('file-persyaratan', FilePersyaratanController::class);
+
+Route::post('/verifikasi-persyaratan/{id}', [FilePersyaratanController::class, 'verifikasi']);

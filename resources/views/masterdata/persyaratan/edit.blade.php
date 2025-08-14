@@ -19,13 +19,13 @@
                     <h5 class="card-title">Form Edit Persyaratan</h5>
 
                     @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
                     @endif
 
                     <form action="{{ route('persyaratan.update', $persyaratan->id) }}" method="POST" class="row g-3">
@@ -52,4 +52,5 @@
         </div>
     </div>
 </section>
+asdasdsad
 @endsection

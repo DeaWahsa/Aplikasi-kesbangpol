@@ -15,7 +15,7 @@
                             <th>Nama</th>
                             <th>NIK</th>
                             <th>Alamat</th>
-                            <th width="125px">Action</th>
+                            <th width="130px">Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -100,9 +100,9 @@
 
         // ✅ Tombol EDIT
         $('body').on('click', '.editPendaftaran', function() {
-            const id = $(this).data('id');
+            const id_pendaftaran = $(this).data('id');
 
-            $.get(`{{ url('daftar-pendaftaran') }}/${id}/edit`)
+            $.get(`{{ url('daftar-pendaftaran') }}/${id_pendaftaran}/edit`)
                 .done(function(data) {
                     // Set judul (opsional)
                     $('.modal-title').text('Edit Pendaftaran');
