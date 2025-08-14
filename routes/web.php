@@ -14,7 +14,7 @@ use App\Http\Controllers\Pendaftaran\FormPendaftaranController;
 */
 
 // 🏠 Dashboard
-Route::get('/', [DashboardController::class, 'index'])->name('home')->middleware('guest');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 // 📄 Persyaratan
 Route::resource('persyaratan', PersyaratanController::class);
