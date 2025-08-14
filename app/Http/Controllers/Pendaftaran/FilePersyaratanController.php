@@ -46,9 +46,39 @@ class FilePersyaratanController extends Controller
         }
 
         return view('pendaftaran.file-persyaratan', compact('menu', 'submenu', 'id_pendaftaran'));
+
     }
     // ini
     /**
+     * Simpan atau update file persyaratan berdasarkan ID persyaratan.
+     */
+    public function update(Request $request, $id)
+    {
+        // dd($id);
+        $request->validate([
+            'file' => 'required|file|mimes:pdf|max:500',
+        ]);
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('uploads/persyaratan', $fileName, 'public');
+
+            M_filepersyaratan::updateOrCreate(
+                ['id_persyaratan' => $id],
+                ['file_path' => $filePath]
+            );
+
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'File tidak ditemukan'], 400);
+
+    }
+
+
+    /**
+
      * Simpan atau update file persyaratan berdasarkan ID persyaratan.
      */
     public function update(Request $request, $id)
@@ -76,6 +106,7 @@ class FilePersyaratanController extends Controller
 
 
     /**
+
      * Tampilkan form pembuatan baru (jika dibutuhkan).
      */
     public function create()
