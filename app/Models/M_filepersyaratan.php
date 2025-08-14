@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class M_filepersyaratan extends Model
 {
     use HasFactory;
+    protected $table = 'm_filepersyaratan';
+    protected $primaryKey = 'id';
+    protected $guarded = ['id'];
 }
