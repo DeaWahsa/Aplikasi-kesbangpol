@@ -23,22 +23,27 @@ class FilePersyaratanController extends Controller
         // dd($id_pendaftaran);
 
         if ($request->ajax()) {
-            // Jika ingin hanya data yang berelasi dengan $id, gunakan where:
-            // $data = M_persyaratan::where('id_daftar', $id)->get();
-            $data = M_persyaratan::leftJoin('m_filepersyaratan', 'm_filepersyaratan.id_persyaratan', '=', 'tabel_persyaratan.id')
-                ->select('tabel_persyaratan.*', 'm_filepersyaratan.id as file_id', 'm_filepersyaratan.original_file_name', 'm_filepersyaratan.nama_media', 'm_filepersyaratan.status')
+            $data = M_persyaratan::leftJoin('m_filepersyaratan', function ($join) use ($id) {
+                $join->on('m_filepersyaratan.id_persyaratan', '=', 'tabel_persyaratan.id')
+                    ->where('m_filepersyaratan.id_pendaftaran', '=', $id); // filter sesuai pendaftaran
+            })
+                ->select(
+                    'tabel_persyaratan.*',
+                    'm_filepersyaratan.id as file_id',
+                    'm_filepersyaratan.original_file_name',
+                    'm_filepersyaratan.nama_media',
+                    'm_filepersyaratan.status'
+                )
                 ->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $btn  = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="edit btn btn-primary btn-sm modalUpload"><i class="ri-upload-2-line"></i></a>';
-                    // Tombol verifikasi sekarang menggunakan file_id (id dari m_filepersyaratan)
                     $verifBtn = '';
                     if ($row->original_file_name) {
                         $verifBtn = ' <a href="javascript:void(0)" data-id="' . $row->file_id . '" data-status="' . $row->status . '" class="btn btn-warning btn-sm btnVerifikasi" title="Ubah Status Verifikasi"><i class="ri-check-fill"></i></a>';
                     }
-
                     return $btn . $verifBtn;
                 })
                 ->rawColumns(['action'])

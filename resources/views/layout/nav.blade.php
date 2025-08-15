@@ -35,11 +35,6 @@
                     <i class="bi bi-circle"></i><span>Daftar Pendaftaran</span>
                 </a>
             </li>
-            <li>
-                <a href="{{url('formpendaftaran')}}">
-                    <i class="bi bi-circle"></i><span>Verifikasi Pendaftaran</span>
-                </a>
-            </li>
         </ul>
     </li><!-- End Tables Nav -->
 
