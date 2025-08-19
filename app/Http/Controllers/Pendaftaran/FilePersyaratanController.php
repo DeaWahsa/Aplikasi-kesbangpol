@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Pendaftaran\PersyaratanController;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class FilePersyaratanController extends Controller
 {
@@ -39,11 +42,13 @@ class FilePersyaratanController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
+                    $btn  = '<div class="btn-group" role="group">';
                     $btn  = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="edit btn btn-primary btn-sm modalUpload"><i class="ri-upload-2-line"></i></a>';
                     $verifBtn = '';
                     if ($row->original_file_name) {
                         $verifBtn = ' <a href="javascript:void(0)" data-id="' . $row->file_id . '" data-status="' . $row->status . '" class="btn btn-warning btn-sm btnVerifikasi" title="Ubah Status Verifikasi"><i class="ri-check-fill"></i></a>';
                     }
+                    $btn .= '</div>';
                     return $btn . $verifBtn;
                 })
                 ->rawColumns(['action'])
@@ -94,37 +99,75 @@ class FilePersyaratanController extends Controller
     public function store(Request $request, $id)
     {
         // dd($request->id_pendaftaran);
+        
+        // $request->validate([
+        //     'file' => 'required|file|mimes:pdf,png,jpg,jpeg|max:2048',
+        //     'id_pendaftaran' => 'required|integer',
+        //     'id_persyaratan' => 'required|integer',
+        // ]);
+        $rules = [
+            'file' => 'required|mimes:pdf|max:500', 
+        ];
 
-        $request->validate([
-            'file' => 'required|file|mimes:pdf,png,jpg,jpeg|max:2048',
-            'id_pendaftaran' => 'required|integer',
-            'id_persyaratan' => 'required|integer',
-        ]);
+        $messages = [
+            'file.required' => 'Pilih file',
+            'file.mimes' => 'ext file harus PDF.',
+            'file.max' => 'Ukuran file Max 500kb.',
+        ];
 
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+		if ($validator->fails()) {
+
+			return response()->json([
+				"message" => implode("<br>", Arr::flatten($validator->errors()->all()))
+			], 422);
+
+		}else{
+
+        $media = M_filepersyaratan::where('id_persyaratan', $request->id_persyaratan)
+                ->where('id_pendaftaran', $request->id_pendaftaran)
+                ->first();
+                        // dd($media);
         $uploadedFile = $request->file('file');
-        $fileName = time() . '_' . $uploadedFile->getClientOriginalName();
+       $fileName = time() . '_' . $uploadedFile->getClientOriginalName();
 
-        $path = $uploadedFile->storeAs('uploads', $fileName, 'public');
+// simpan ke disk 'public' folder 'uploads'
+$newPath = $uploadedFile->storeAs('uploads', $fileName, 'public');
 
-        // Cari berdasarkan id_pendaftaran dan id_persyaratan
-        M_filepersyaratan::updateOrCreate(
-            [
-                'id_pendaftaran' => $request->id_pendaftaran,
-                'id_persyaratan' => $request->id_persyaratan
-            ],
-            [
-                'nama_media' => $fileName,
-                'type' => $uploadedFile->getMimeType(),
-                'ext' => $uploadedFile->getClientOriginalExtension(),
-                'original_file_name' => $uploadedFile->getClientOriginalName(),
-                'created_at' => now(),
-                'updated_at' => now(), // perbaikan: update**d**_at
-            ]
-        );
+if ($media) {
+    // simpan nama file lama sebelum di-update
+    $oldFileName = $media->nama_media; // di DB kamu simpan nama saja, bukan path
 
-        return response()->json([
-            'message' => 'File berhasil disimpan atau diperbarui!',
+    // update record
+    $media->update([
+        'nama_media'         => $fileName,
+        'type'               => $uploadedFile->getMimeType(),
+        'ext'                => $uploadedFile->getClientOriginalExtension(),
+        'original_file_name' => $uploadedFile->getClientOriginalName(),
+        // 'updated_at' otomatis kalau timestamps true
+    ]);
+
+    // hapus file lama jika ada
+    if ($oldFileName && Storage::disk('public')->exists('uploads/'.$oldFileName)) {
+        Storage::disk('public')->delete('uploads/'.$oldFileName);
+    }
+    } else {
+        // create record baru
+        M_filepersyaratan::create([
+            'id_pendaftaran'     => $request->id_pendaftaran,
+            'id_persyaratan'     => $request->id_persyaratan,
+            'nama_media'         => $fileName,
+            'type'               => $uploadedFile->getMimeType(),
+            'ext'                => $uploadedFile->getClientOriginalExtension(),
+            'original_file_name' => $uploadedFile->getClientOriginalName(),
         ]);
+    }
+    }
+        return response()->json([
+            'success' => true,
+            'message' => 'Berhasil Mengaupload Berkas',
+        ], 200);
     }
 
     /**

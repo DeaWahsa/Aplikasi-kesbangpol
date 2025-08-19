@@ -27,6 +27,7 @@
     <link href="{{asset('/')}}assets/vendor/quill/quill.bubble.css" rel="stylesheet">
     <link href="{{asset('/')}}assets/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="{{asset('/')}}assets/vendor/simple-datatables/style.css" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/waitMe/waitMe.min.css') }}" rel="stylesheet">
 
     <!-- Template Main CSS File -->
     <link href="{{asset('/')}}assets/css/style.css" rel="stylesheet">
@@ -57,7 +58,7 @@
         <div class="d-flex align-items-center justify-content-between">
             <a href="index.html" class="logo d-flex align-items-center">
                 <img src="{{asset('/')}}assets/img/logo.png" alt="">
-                <span class="d-none d-lg-block">NiceAdmin</span>
+                <span class="d-none d-lg-block">KESBANGPOL</span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
         </div><!-- End Logo -->
@@ -319,6 +320,27 @@
     <script src="{{asset('/')}}assets/js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.datatables.net/2.3.2/js/dataTables.min.js"></script>
+   <script src="{{ asset('assets/vendor/waitMe/waitMe.min.js') }}"></script>
+
+    <script>
+         function myLoader(element, message) {
+        bgLoading = 'rgba(255,255,255,0.8)';
+        colorLoading = '#000';
+
+        $(element).waitMe({
+            effect: 'win8_linear',
+            text: message,
+            color: colorLoading,
+            bg: bgLoading,
+            maxSize: '',
+            // waitTime: 3000,
+            textPos: 'vertical',
+            fontSize: '10pt',
+            // source: "{{ asset('logo/ezgif-5-cd5e3bb456.gif') }}",
+            onClose: function() {}
+        });
+    }
+    </script>
 
     @yield('scripts')
 

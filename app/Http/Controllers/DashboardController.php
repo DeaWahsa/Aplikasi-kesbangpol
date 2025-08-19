@@ -11,7 +11,14 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('dashboard');
+        $menu = "dashboard";
+        $submenu = "";
+
+        $data = [
+            'menu' => $menu,
+            'submenu' => $submenu
+        ];
+        return view('dashboard' , $data);
     }
 
     /**

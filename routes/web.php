@@ -12,7 +12,7 @@ use App\Http\Controllers\Pendaftaran\FormPendaftaranController;
 | Web Routes
 |--------------------------------------------------------------------------
 */
-
+Route::middleware(['auth'])->group(function(){
 // 🏠 Dashboard
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -29,8 +29,11 @@ Route::resource('daftar-pendaftaran', DaftarPendaftaranController::class);
 // Route::get('file-persyaratan/{id}', FilePersyaratanController::class, 'index');
 Route::get('/file-persyaratan/{id}', [FilePersyaratanController::class, 'index'])->name('file-persyaratan.show');
 
-Route::post('/upload-file-persyaratan/{id}', [FilePersyaratanController::class, 'store'])->name('file-persyaratan.store');
+Route::post('/upload-file-persyaratan/{id}', [FilePersyaratanController::class, 'store']);
 
 Route::resource('file-persyaratan', FilePersyaratanController::class);
 
 Route::post('/verifikasi-persyaratan/{id}', [FilePersyaratanController::class, 'verifikasi']);
+
+  Route::get('/cetak-pemohon/{id}', [DaftarPendaftaranController::class, 'cetak_pemohon'])->name('cetakPemohon');
+});

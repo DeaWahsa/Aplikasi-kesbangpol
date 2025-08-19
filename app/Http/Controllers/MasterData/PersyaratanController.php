@@ -15,6 +15,7 @@ class PersyaratanController extends Controller
     {
         $menu = "masterdata";
         $submenu = "persyaratan";
+        // dd($menu);
         if ($request->ajax()) {
             $data = M_persyaratan::latest()->get();
             return DataTablesDataTables::of($data)

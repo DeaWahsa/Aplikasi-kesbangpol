@@ -15,6 +15,7 @@
                             <th>Nama</th>
                             <th>NIK</th>
                             <th>Alamat</th>
+                            <th>Status</th>
                             <th width="130px">Action</th>
                         </tr>
                     </thead>
@@ -68,199 +69,241 @@
 
 @section('scripts')
 <script>
-    $(document).ready(function() {
-        const table = $('#m_daftarpendaftaran').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: '{{ route("daftar-pendaftaran.index") }}',
-            columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'DT_RowIndex',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'nama',
-                    name: 'nama'
-                },
-                {
-                    data: 'nik',
-                    name: 'nik'
-                },
-                {
-                    data: 'alamat',
-                    name: 'alamat'
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false
+$(document).ready(function() {
+    const table = $('#m_daftarpendaftaran').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: '{{ route("daftar-pendaftaran.index") }}',
+        columns: [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                orderable: false,
+                searchable: false,
+                className: 'text-center',
+                width: '40px'
+            },
+            {
+                data: 'nama',
+                name: 'nama'
+            },
+            {
+                data: 'nik',
+                name: 'nik',
+                className: 'text-start'
+            },
+            {
+                data: 'alamat',
+                name: 'alamat'
+            },
+            {
+                data: 'status',
+                name: 'status',
+            },
+            {
+                data: 'action',
+                name: 'action',
+                orderable: false,
+                searchable: false,
+                className: 'text-center',
+                width: '160px'
+            }
+        ]
+
+    });
+
+    // ✅ Tombol EDIT
+    $('body').on('click', '.editPendaftaran', function() {
+        const id_pendaftaran = $(this).data('id');
+
+        $.get(`{{ url('daftar-pendaftaran') }}/${id_pendaftaran}/edit`)
+            .done(function(data) {
+                // Set judul (opsional)
+                $('.modal-title').text('Edit Pendaftaran');
+
+                // Tampilkan modal (jika pakai Bootstrap; jika tidak, ganti dengan modal custom)
+                if ($('#editModal').modal) {
+                    $('#editModal').modal('show');
                 }
-            ]
-        });
 
-        // ✅ Tombol EDIT
-        $('body').on('click', '.editPendaftaran', function() {
-            const id_pendaftaran = $(this).data('id');
+                // Isi form
+                $('#edit_id').val(data.id);
+                $('#edit_nama').val(data.nama);
+                $('#edit_nik').val(data.nik);
+                $('#edit_alamat').val(data.alamat);
+            })
+            .fail(function(xhr) {
+                Swal.fire('Gagal', 'Tidak dapat mengambil data untuk diedit.', 'error');
+                console.error(xhr.responseText);
+            });
+    });
 
-            $.get(`{{ url('daftar-pendaftaran') }}/${id_pendaftaran}/edit`)
-                .done(function(data) {
-                    // Set judul (opsional)
-                    $('.modal-title').text('Edit Pendaftaran');
+    // ✅ Submit form EDIT (AJAX)
+    $('#editForm').off('submit').on('submit', function(e) {
+        e.preventDefault();
 
-                    // Tampilkan modal (jika pakai Bootstrap; jika tidak, ganti dengan modal custom)
-                    if ($('#editModal').modal) {
-                        $('#editModal').modal('show');
+        const id = $('#edit_id').val();
+        if (!id) {
+            Swal.fire('Gagal', 'ID tidak ditemukan.', 'error');
+            return;
+        }
+
+        const url = `{{ url('daftar-pendaftaran') }}/${id}`;
+        const payload = {
+            _token: '{{ csrf_token() }}',
+            _method: 'PUT',
+            nama: $('#edit_nama').val(),
+            nik: $('#edit_nik').val(),
+            alamat: $('#edit_alamat').val()
+        };
+
+        $('#btnUpdate').prop('disabled', true).text('Menyimpan...');
+
+        $.post(url, payload)
+            .done(function(res) {
+                if ($('#editModal').modal) {
+                    $('#editModal').modal('hide');
+                }
+                $('#editForm')[0].reset();
+                $('#edit_id').val('');
+                table.ajax.reload(null, false);
+                Swal.fire('Sukses', res?.success || 'Data berhasil diperbarui.', 'success');
+            })
+            .fail(function(xhr) {
+                let msg = 'Terjadi kesalahan saat update.';
+                if (xhr.status === 422 && xhr.responseJSON?.errors) {
+                    const firstKey = Object.keys(xhr.responseJSON.errors)[0];
+                    msg = xhr.responseJSON.errors[firstKey][0];
+                }
+                Swal.fire('Gagal', msg, 'error');
+                console.error(xhr.responseText);
+            })
+            .always(function() {
+                $('#btnUpdate').prop('disabled', false).text('Simpan Perubahan');
+            });
+    });
+
+    // ✅ Tombol HAPUS
+    $('body').on('click', '.deletePendaftaran', function() {
+        const id = $(this).data("id");
+
+        Swal.fire({
+            title: "Yakin ingin menghapus?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Ya, hapus",
+            cancelButtonText: "Batal"
+        }).then((result) => {
+            if (!result.isConfirmed) return;
+
+            $.ajax({
+                    url: `{{ url('daftar-pendaftaran') }}/${id}`,
+                    type: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}'
                     }
-
-                    // Isi form
-                    $('#edit_id').val(data.id);
-                    $('#edit_nama').val(data.nama);
-                    $('#edit_nik').val(data.nik);
-                    $('#edit_alamat').val(data.alamat);
                 })
-                .fail(function(xhr) {
-                    Swal.fire('Gagal', 'Tidak dapat mengambil data untuk diedit.', 'error');
-                    console.error(xhr.responseText);
+                .done(function(response) {
+                    table.ajax.reload(null, false);
+                    Swal.fire("Berhasil!", response?.success || "Data berhasil dihapus.",
+                        "success");
+                })
+                .fail(function() {
+                    Swal.fire("Gagal!", "Data gagal dihapus.", "error");
                 });
         });
+    });
 
-        // ✅ Submit form EDIT (AJAX)
-        $('#editForm').off('submit').on('submit', function(e) {
-            e.preventDefault();
+    // ✅ Tombol UPLOAD (AJAX file upload via FormData)
+    $('body').on('click', '.uploadPendaftaran', function() {
+        const id = $(this).data('id');
 
-            const id = $('#edit_id').val();
-            if (!id) {
-                Swal.fire('Gagal', 'ID tidak ditemukan.', 'error');
+        // Buat input file sementara
+        const $input = $(
+            '<input type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" style="display:none;">');
+        $('body').append($input);
+
+        $input.on('change', function() {
+            const file = this.files[0];
+            if (!file) {
+                $input.remove();
                 return;
             }
 
-            const url = `{{ url('daftar-pendaftaran') }}/${id}`;
-            const payload = {
-                _token: '{{ csrf_token() }}',
-                _method: 'PUT',
-                nama: $('#edit_nama').val(),
-                nik: $('#edit_nik').val(),
-                alamat: $('#edit_alamat').val()
-            };
+            const formData = new FormData();
+            formData.append('_token', '{{ csrf_token() }}');
+            formData.append('berkas', file);
 
-            $('#btnUpdate').prop('disabled', true).text('Menyimpan...');
-
-            $.post(url, payload)
-                .done(function(res) {
-                    if ($('#editModal').modal) {
-                        $('#editModal').modal('hide');
+            $.ajax({
+                    url: `{{ url('daftar-pendaftaran') }}/${id}/upload`,
+                    type: 'POST',
+                    data: formData,
+                    processData: false, // wajib untuk FormData
+                    contentType: false, // wajib untuk FormData
+                    xhr: function() {
+                        // (Opsional) progress upload
+                        const xhr = $.ajaxSettings.xhr();
+                        if (xhr.upload) {
+                            xhr.upload.addEventListener('progress', function(e) {
+                                if (e.lengthComputable) {
+                                    const pct = Math.round((e.loaded / e
+                                        .total) * 100);
+                                    // Contoh: tampilkan progress di console atau progress bar kustom
+                                    console.log('Upload:', pct + '%');
+                                }
+                            }, false);
+                        }
+                        return xhr;
                     }
-                    $('#editForm')[0].reset();
-                    $('#edit_id').val('');
+                })
+                .done(function(res) {
                     table.ajax.reload(null, false);
-                    Swal.fire('Sukses', res?.success || 'Data berhasil diperbarui.', 'success');
+                    Swal.fire('Sukses', res?.success || 'File berhasil diupload.',
+                        'success');
                 })
                 .fail(function(xhr) {
-                    let msg = 'Terjadi kesalahan saat update.';
-                    if (xhr.status === 422 && xhr.responseJSON?.errors) {
-                        const firstKey = Object.keys(xhr.responseJSON.errors)[0];
-                        msg = xhr.responseJSON.errors[firstKey][0];
+                    let msg = 'Gagal mengupload file.';
+                    if (xhr.status === 422 && xhr.responseJSON?.errors?.berkas) {
+                        msg = xhr.responseJSON.errors.berkas[0];
                     }
                     Swal.fire('Gagal', msg, 'error');
                     console.error(xhr.responseText);
                 })
                 .always(function() {
-                    $('#btnUpdate').prop('disabled', false).text('Simpan Perubahan');
+                    $input.remove();
                 });
         });
 
-        // ✅ Tombol HAPUS
-        $('body').on('click', '.deletePendaftaran', function() {
-            const id = $(this).data("id");
+        // Trigger pilih file
+        $input.click();
+    });
 
-            Swal.fire({
-                title: "Yakin ingin menghapus?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Ya, hapus",
-                cancelButtonText: "Batal"
-            }).then((result) => {
-                if (!result.isConfirmed) return;
+    $('body').on('click', '.cetak', function(e) {
+        e.preventDefault();
+        var id = $(this).data('id');
 
-                $.ajax({
-                        url: `{{ url('daftar-pendaftaran') }}/${id}`,
-                        type: 'DELETE',
-                        data: {
-                            _token: '{{ csrf_token() }}'
-                        }
-                    })
-                    .done(function(response) {
-                        table.ajax.reload(null, false);
-                        Swal.fire("Berhasil!", response?.success || "Data berhasil dihapus.", "success");
-                    })
-                    .fail(function() {
-                        Swal.fire("Gagal!", "Data gagal dihapus.", "error");
-                    });
-            });
-        });
-
-        // ✅ Tombol UPLOAD (AJAX file upload via FormData)
-        $('body').on('click', '.uploadPendaftaran', function() {
-            const id = $(this).data('id');
-
-            // Buat input file sementara
-            const $input = $('<input type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" style="display:none;">');
-            $('body').append($input);
-
-            $input.on('change', function() {
-                const file = this.files[0];
-                if (!file) {
-                    $input.remove();
-                    return;
-                }
-
-                const formData = new FormData();
-                formData.append('_token', '{{ csrf_token() }}');
-                formData.append('berkas', file);
-
-                $.ajax({
-                        url: `{{ url('daftar-pendaftaran') }}/${id}/upload`,
-                        type: 'POST',
-                        data: formData,
-                        processData: false, // wajib untuk FormData
-                        contentType: false, // wajib untuk FormData
-                        xhr: function() {
-                            // (Opsional) progress upload
-                            const xhr = $.ajaxSettings.xhr();
-                            if (xhr.upload) {
-                                xhr.upload.addEventListener('progress', function(e) {
-                                    if (e.lengthComputable) {
-                                        const pct = Math.round((e.loaded / e.total) * 100);
-                                        // Contoh: tampilkan progress di console atau progress bar kustom
-                                        console.log('Upload:', pct + '%');
-                                    }
-                                }, false);
-                            }
-                            return xhr;
-                        }
-                    })
-                    .done(function(res) {
-                        table.ajax.reload(null, false);
-                        Swal.fire('Sukses', res?.success || 'File berhasil diupload.', 'success');
-                    })
-                    .fail(function(xhr) {
-                        let msg = 'Gagal mengupload file.';
-                        if (xhr.status === 422 && xhr.responseJSON?.errors?.berkas) {
-                            msg = xhr.responseJSON.errors.berkas[0];
-                        }
-                        Swal.fire('Gagal', msg, 'error');
-                        console.error(xhr.responseText);
-                    })
-                    .always(function() {
-                        $input.remove();
-                    });
-            });
-
-            // Trigger pilih file
-            $input.click();
+        $.ajax({
+            url: "{{ url('cetak-pemohon') }}/" + id,
+            type: "GET",
+            xhrFields: {
+                responseType: 'blob' // <--- penting biar dapat file binary
+            },
+            success: function(data) {
+                // bikin link sementara
+                var url = window.URL.createObjectURL(data);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = "pemohon.docx"; // nama file
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            },
+            error: function(xhr) {
+                console.log("Download gagal:", xhr);
+                Swal.fire("Error", "Gagal mendownload file", "error");
+            }
         });
     });
+});
 </script>
 @endsection
