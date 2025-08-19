@@ -1,7 +1,7 @@
 <ul class="sidebar-nav" id="sidebar-nav">
 
     <li class="nav-item">
-        <a class="nav-link collapsed" href="{{url('/')}}">
+        <a class="nav-link collapsed" href="{{url('/dashboard')}}">
             <i class="bi bi-grid"></i>
             <span>Dashboard</span>
         </a>
