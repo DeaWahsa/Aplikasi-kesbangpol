@@ -2,10 +2,10 @@
 
 @section('content')
 <div class="row">
-    <div class="col-lg-12">
+    <div class="col-lg-8">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Data Pendaftaran</h5>
+                <h5 class="card-title">File Pendaftaran</h5>
 
                 <!-- Table -->
                 <table id="m_daftarpendaftaran" class="display table table-bordered" style="width:100%">
@@ -20,11 +20,43 @@
                     </thead>
                     <tbody></tbody>
                 </table>
-                <!-- End Table -->
             </div>
         </div>
     </div>
+    <div class="col-lg-4">
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body">
+            <h5 class="card-title border-bottom pb-2 mb-3">
+                <i class="bi bi-person-badge me-2 text-primary"></i> Biodata
+            </h5>
+
+            <table class="table table-sm align-middle">
+                <tr>
+                    <th class="text-muted" style="width: 40%">
+                        <i class="bi bi-people me-2 text-success"></i> Kelompok Tani
+                    </th>
+                    <td class="fw-semibold">: {{ $biodata->nama }}</td>
+                </tr>
+                <tr>
+                    <th class="text-muted">
+                        <i class="bi bi-credit-card-2-front me-2 text-warning"></i> NIK
+                    </th>
+                    <td class="fw-semibold">: {{ $biodata->nik }}</td>
+                </tr>
+                <tr>
+                    <th class="text-muted">
+                        <i class="bi bi-geo-alt me-2 text-danger"></i> Alamat
+                    </th>
+                    <td class="fw-semibold">: {{ $biodata->alamat }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </div>
+
+
+</div>
+
 
 <!-- Modal Upload -->
 <div class="modal fade" id="modalUpload" tabindex="-1">
@@ -69,8 +101,8 @@
                         <label>Status Verifikasi</label>
                         <select class="form-control" name="status_verifikasi" id="status_verifikasi" required>
                             <option value="">Pilih</option>
-                            <option value="Terverifikasi">Verifikasi</option>
-                            <option value="Ditolak">Tolak</option>
+                            <option value="2">Verifikasi</option>
+                            <option value="1">Tolak</option>
                         </select>
                     </div>
                 </div>
@@ -120,21 +152,25 @@ $(document).ready(function() {
                 data: 'status',
                 name: 'status',
                 render: function(data, type, row) {
-                    let status = '';
+                    let statusValue = (data !== null) ? parseInt(data) : null;
+
                     if (!row.original_file_name) {
                         status = '<span class="badge bg-warning text-dark">Belum Upload</span>';
-                    } else if (data === 'Terverifikasi') {
-                        status = '<span class="badge bg-success">Terverifikasi</span>';
-                    } else if (data === 'Ditolak') {
-                        status = '<span class="badge bg-danger">Ditolak</span>';
-                    } else {
+                    } else if (statusValue === 0) {
                         status = '<span class="badge bg-secondary">Belum Diverifikasi</span>';
+                    } else if (statusValue === 1) {
+                        status = '<span class="badge bg-danger">Ditolak</span>';
+                    } else if (statusValue === 2) {
+                        status = '<span class="badge bg-success">Terverifikasi</span>';
+                    } else {
+                        status = '<span class="badge bg-dark">Unknown</span>';
                     }
 
                     return status;
                 },
                 className: 'text-center'
             },
+
             {
                 data: 'action',
                 name: 'action',
@@ -222,6 +258,12 @@ $(document).ready(function() {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+             beforeSend: function() {
+                myLoader('body', 'Sedang memuat... <br> Mohon menunggu beberapa saat...');
+            },
+            complete: function() {
+                $('body').waitMe('hide');
             },
             data: formData
         }).done(function(res) {

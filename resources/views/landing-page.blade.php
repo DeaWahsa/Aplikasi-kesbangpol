@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Index - Impact Bootstrap Template</title>
+  <title>Pelayanan - KESBANGPOL</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 

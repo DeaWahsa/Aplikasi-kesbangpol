@@ -22,6 +22,7 @@ Route::get('/persyaratan/data', [PersyaratanController::class, 'getAll']);
 
 // 📋 Formulir Pendaftaran
 Route::resource('form-pendaftaran', FormPendaftaranController::class);
+Route::get('/get-desa/{kecamatan_id}', [FormPendaftaranController::class, 'getDesa']);
 
 // 📝 Daftar Pendaftaran — CUKUP SATU INI
 Route::resource('daftar-pendaftaran', DaftarPendaftaranController::class);
@@ -36,4 +37,6 @@ Route::resource('file-persyaratan', FilePersyaratanController::class);
 Route::post('/verifikasi-persyaratan/{id}', [FilePersyaratanController::class, 'verifikasi']);
 
   Route::get('/cetak-pemohon/{id}', [DaftarPendaftaranController::class, 'cetak_pemohon'])->name('cetakPemohon');
+ 
+
 });

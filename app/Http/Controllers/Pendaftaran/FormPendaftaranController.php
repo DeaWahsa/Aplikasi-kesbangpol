@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Pendaftaran;
 
 use App\Http\Controllers\Controller;
+use App\Models\M_desa;
 use App\Models\M_formpendaftaran;
+use App\Models\M_kecamatan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,21 +15,21 @@ class FormPendaftaranController extends Controller
     {
         $menu = "pendaftaran";
         $submenu = "form-pendaftaran";
+        $kecamatan = M_kecamatan::all();
 
-        return view('pendaftaran.form-pendaftaran', compact('menu', 'submenu'));
+        $data = [
+            'menu' => $menu,
+            'submenu' => $submenu,
+            'kecamatan' => $kecamatan
+        ];
+
+        return view('pendaftaran.form-pendaftaran', $data);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function getDesa($kecamatan_id)
     {
-        //
+        $desa = M_desa::where('kecamatan_id', $kecamatan_id)->get();
+        return response()->json($desa);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -50,37 +52,5 @@ class FormPendaftaranController extends Controller
         );
 
         return response()->json(['success' => 'Data berhasil disimpan.', 'data' => $formpendaftaran]);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(M_formpendaftaran $m_formpendaftaran)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(M_formpendaftaran $m_formpendaftaran)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, M_formpendaftaran $m_formpendaftaran)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(M_formpendaftaran $m_formpendaftaran)
-    {
-        //
     }
 }

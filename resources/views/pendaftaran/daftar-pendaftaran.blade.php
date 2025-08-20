@@ -300,7 +300,7 @@ $(document).ready(function() {
             },
             error: function(xhr) {
                 console.log("Download gagal:", xhr);
-                Swal.fire("Error", "Gagal mendownload file", "error");
+                Swal.fire("Error", "File Hanya Bisa Didownload jika, Status pemohon Sudah Terverifikasi", "error");
             }
         });
     });

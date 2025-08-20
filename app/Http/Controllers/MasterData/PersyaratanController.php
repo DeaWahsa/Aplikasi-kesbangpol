@@ -15,6 +15,13 @@ class PersyaratanController extends Controller
     {
         $menu = "masterdata";
         $submenu = "persyaratan";
+
+        // dd($submenu);
+
+        $data = [
+            'menu' => $menu,
+            'submenu' => $submenu
+        ];
         // dd($menu);
         if ($request->ajax()) {
             $data = M_persyaratan::latest()->get();
@@ -28,7 +35,7 @@ class PersyaratanController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('masterdata.persyaratan', compact('menu', 'submenu'));
+        return view('masterdata.persyaratan', $data);
     }
 
     public function create()

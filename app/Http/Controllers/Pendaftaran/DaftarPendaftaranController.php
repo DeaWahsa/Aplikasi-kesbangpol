@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\M_daftarpendaftaran;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Yajra\DataTables\Facades\DataTables;
 
 class DaftarPendaftaranController extends Controller
@@ -35,11 +36,13 @@ class DaftarPendaftaranController extends Controller
                 ->editColumn('status', function ($row) {
                     switch ($row->status) {
                         case 0:
-                            return '<span class="badge bg-warning">Belum Lengkap</span>';
+                            return '<span class="badge bg-danger">Belum Lengkap</span>';
                         case 1:
                             return '<span class="badge bg-success">Terverifikasi</span>';
                         case 2:
                             return '<span class="badge bg-danger">Ditolak</span>';
+                        case 3:
+                            return '<span class="badge bg-warning">Lengkap Menunggu Verifikasi</span>';
                         default:
                             return '-';
                     }
@@ -100,26 +103,50 @@ class DaftarPendaftaranController extends Controller
         return view('pendaftaran.file-persyaratan', compact('menu', 'submenu'));
     }
 
-     public function cetak_pemohon($id)
+    public function cetak_pemohon($id)
     {
-            $pemohon = M_daftarpendaftaran::where('id', $id)->first();
-            $templatePath = public_path('pemohon.docx');
-    $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
+        $pemohon = M_daftarpendaftaran::where('id', $id)->first();
 
-    // Isi nilai
-    $templateProcessor->setValue('nama', $pemohon->nama);
-    $templateProcessor->setValue('nik', $pemohon->nik);
-    $templateProcessor->setValue('alamat', $pemohon->alamat);
+        if (!$pemohon) {
+            return response()->json([
+                'message' => 'Data tidak ditemukan'
+            ], 404);
+        }
 
-    // Tentukan nama file sementara untuk download
-    $fileName = $pemohon->nama . '.docx';
-    $savePath = storage_path('app/public/' . $fileName);
+        // ✅ cek status
+        if ($pemohon->status != 1) {
+            return response()->json([
+                'message' => 'Cetak hanya bisa dilakukan jika status sudah disetujui'
+            ], 403);
+        }
 
-    // Simpan file sementara
-    $templateProcessor->saveAs($savePath);
+        $templatePath = public_path('pemohon.docx');
+        $dataQr = "Nama: {$pemohon->nama}\nNIK: {$pemohon->nik}";
+        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
 
-    // Download & hapus setelah terkirim
-    return response()->download($savePath)->deleteFileAfterSend(true);
+        // Isi nilai
+        $templateProcessor->setValue('nama', $pemohon->nama);
+        $templateProcessor->setValue('nik', $pemohon->nik);
+        $templateProcessor->setValue('alamat', $pemohon->alamat);
 
+        // QR Code
+        $qrPath = storage_path('app/public/qr_'.$pemohon->id.'.png');
+        QrCode::format('png')->size(200)->generate($dataQr, $qrPath);
+
+        $templateProcessor->setImageValue('qrcode', [
+            'path' => $qrPath,
+            'width' => 100,
+            'height' => 100,
+            'ratio' => false
+        ]);
+
+        // Tentukan nama file
+        $fileName = $pemohon->nama . '.docx';
+        $savePath = storage_path('app/public/' . $fileName);
+
+        $templateProcessor->saveAs($savePath);
+
+        return response()->download($savePath)->deleteFileAfterSend(true);
     }
+
 }
