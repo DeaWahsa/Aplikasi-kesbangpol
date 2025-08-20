@@ -6,53 +6,53 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">File Pendaftaran</h5>
-
-                <!-- Table -->
-                <table id="m_daftarpendaftaran" class="display table table-bordered" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama Persyaratan</th>
-                            <th>Nama File</th>
-                            <th>Status</th>
-                            <th width="125px">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table id="m_daftarpendaftaran" class="display table table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Persyaratan</th>
+                                <th>Nama File</th>
+                                <th>Status</th>
+                                <th width="125px">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
     <div class="col-lg-4">
-    <div class="card shadow-sm border-0 rounded-3">
-        <div class="card-body">
-            <h5 class="card-title border-bottom pb-2 mb-3">
-                <i class="bi bi-person-badge me-2 text-primary"></i> Biodata
-            </h5>
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body">
+                <h5 class="card-title border-bottom pb-2 mb-3">
+                    <i class="bi bi-person-badge me-2 text-primary"></i> Biodata
+                </h5>
 
-            <table class="table table-sm align-middle">
-                <tr>
-                    <th class="text-muted" style="width: 40%">
-                        <i class="bi bi-people me-2 text-success"></i> Kelompok Tani
-                    </th>
-                    <td class="fw-semibold">: {{ $biodata->nama }}</td>
-                </tr>
-                <tr>
-                    <th class="text-muted">
-                        <i class="bi bi-credit-card-2-front me-2 text-warning"></i> NIK
-                    </th>
-                    <td class="fw-semibold">: {{ $biodata->nik }}</td>
-                </tr>
-                <tr>
-                    <th class="text-muted">
-                        <i class="bi bi-geo-alt me-2 text-danger"></i> Alamat
-                    </th>
-                    <td class="fw-semibold">: {{ $biodata->alamat }}</td>
-                </tr>
-            </table>
+                <table class="table table-sm align-middle">
+                    <tr>
+                        <th class="text-muted" style="width: 40%">
+                            <i class="bi bi-people me-2 text-success"></i> Kelompok Tani
+                        </th>
+                        <td class="fw-semibold">: {{ $biodata->nama }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">
+                            <i class="bi bi-credit-card-2-front me-2 text-warning"></i> NIK
+                        </th>
+                        <td class="fw-semibold">: {{ $biodata->nik }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">
+                            <i class="bi bi-geo-alt me-2 text-danger"></i> Alamat
+                        </th>
+                        <td class="fw-semibold">: {{ $biodata->alamat }}</td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 
 
 </div>
@@ -123,6 +123,7 @@ $(document).ready(function() {
     const table = $('#m_daftarpendaftaran').DataTable({
         processing: true,
         serverSide: true,
+        responsive: true,
         ajax: `{{ url('file-persyaratan') }}/${id}`,
         columns: [{
                 data: 'DT_RowIndex',
@@ -259,7 +260,7 @@ $(document).ready(function() {
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-             beforeSend: function() {
+            beforeSend: function() {
                 myLoader('body', 'Sedang memuat... <br> Mohon menunggu beberapa saat...');
             },
             complete: function() {

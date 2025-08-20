@@ -2,32 +2,26 @@
 @section('content')
 <div class="row">
     <div class="col-lg-12">
-
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Data Pendaftaran</h5>
-
-                <!-- Table -->
-                <table id="m_daftarpendaftaran" class="display table table-bordered" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>NIK</th>
-                            <th>Alamat</th>
-                            <th>Status</th>
-                            <th width="130px">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-                <!-- End Table -->
-
-                <!-- inikpunya dea -->
-
+                <div class="table-responsive">
+                    <table id="m_daftarpendaftaran" class="display table table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>NIK</th>
+                                <th>Alamat</th>
+                                <th>Status</th>
+                                <th width="130px">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -73,6 +67,7 @@ $(document).ready(function() {
     const table = $('#m_daftarpendaftaran').DataTable({
         processing: true,
         serverSide: true,
+        responsive: true,
         ajax: '{{ route("daftar-pendaftaran.index") }}',
         columns: [{
                 data: 'DT_RowIndex',
@@ -300,7 +295,9 @@ $(document).ready(function() {
             },
             error: function(xhr) {
                 console.log("Download gagal:", xhr);
-                Swal.fire("Error", "File Hanya Bisa Didownload jika, Status pemohon Sudah Terverifikasi", "error");
+                Swal.fire("Error",
+                    "File Hanya Bisa Didownload jika, Status pemohon Sudah Terverifikasi",
+                    "error");
             }
         });
     });

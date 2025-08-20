@@ -25,7 +25,7 @@
     <li class="nav-item">
         <a class="nav-link @if($menu != 'pendaftaran') collapsed @endif" data-bs-target="#components1-nav"
             data-bs-toggle="collapse" href="#">
-            <i class="bi bi-menu-button-wide"></i><span>Laporan</span><i class="bi bi-chevron-down ms-auto"></i>
+            <i class="bi bi-menu-button-wide"></i><span>Pendaftaran</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="components1-nav" class="nav-content collapse @if($menu == 'pendaftaran') show @endif"
             data-bs-parent="#sidebar-nav">
