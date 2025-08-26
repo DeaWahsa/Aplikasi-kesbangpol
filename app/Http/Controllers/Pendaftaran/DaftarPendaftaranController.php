@@ -23,12 +23,12 @@ class DaftarPendaftaranController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                $btn  = '<div class="btn-group" role="group">';
-                $btn .= '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-primary btn-sm editPendaftaran"><i class="ri-edit-2-line"></i></a>';
-                $btn .= '<a href="' . route('file-persyaratan.show', $row->id) . '" class="btn btn-info btn-sm"><i class="ri-file-3-fill"></i></a>';
-                $btn .= '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm deletePendaftaran"><i class="ri-delete-bin-5-line"></i></a>';
-                $btn .= '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-warning btn-sm cetak"><i class="ri-file-word-line"></i></a>';
-                $btn .= '</div>';
+                    $btn  = '<div class="btn-group" role="group">';
+                    $btn .= '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-primary btn-sm editPendaftaran"><i class="ri-edit-2-line"></i></a>';
+                    $btn .= '<a href="' . route('file-persyaratan.show', $row->id) . '" class="btn btn-info btn-sm"><i class="ri-file-3-fill"></i></a>';
+                    $btn .= '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm deletePendaftaran"><i class="ri-delete-bin-5-line"></i></a>';
+                    $btn .= '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-warning btn-sm cetak"><i class="ri-file-word-line"></i></a>';
+                    $btn .= '</div>';
 
 
                     return $btn;
@@ -64,9 +64,9 @@ class DaftarPendaftaranController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'nama' => 'required',
-            'nik' => 'required',
-            'alamat' => 'required'
+            'nama_kelompok' => 'required',
+            'bidang_kegiatan' => 'required',
+            'program_kerja' => 'required'
         ]);
 
         $daftar = M_daftarpendaftaran::findOrFail($id);
@@ -105,7 +105,10 @@ class DaftarPendaftaranController extends Controller
 
     public function cetak_pemohon($id)
     {
-        $pemohon = M_daftarpendaftaran::where('id', $id)->first();
+        $pemohon = M_daftarpendaftaran::join('m_jenis_kelompok', 'm_jenis_kelompok.id', '=', 'm_formpendaftaran.id_jenis')
+            ->select('m_formpendaftaran.*', 'm_jenis_kelompok.nama_jenis_kelompok', 'm_jenis_kelompok.opd')
+            ->where('m_formpendaftaran.id', $id)->first();
+        // dd($pemohon);
 
         if (!$pemohon) {
             return response()->json([
@@ -121,22 +124,29 @@ class DaftarPendaftaranController extends Controller
         }
 
         $templatePath = public_path('pemohon.docx');
-        $dataQr = "Nama: {$pemohon->nama}\nNIK: {$pemohon->nik}";
+        $dataQr = "Nama: {$pemohon->nama_kelompok}\nNIK Ketua Pengurus: {$pemohon->nik_ketua_pengurus}\nNomor Registrasi: {$pemohon->nomor_registrasi}";
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
 
         // Isi nilai
-        $templateProcessor->setValue('nama', $pemohon->nama);
-        $templateProcessor->setValue('nik', $pemohon->nik);
-        $templateProcessor->setValue('alamat', $pemohon->alamat);
+        $templateProcessor->setValue('no_surat_permohonan', $pemohon->no_surat_permohonan);
+        $templateProcessor->setValue('tgl_surat_permohonan', $pemohon->tgl_surat_permohonan);
+        $templateProcessor->setValue('hal_surat_permohonan', $pemohon->hal_surat_permohonan);
+        $templateProcessor->setValue('nama_kelompok', $pemohon->nama_kelompok);
+        $templateProcessor->setValue('bidang_kegiatan', $pemohon->bidang_kegiatan);
+        $templateProcessor->setValue('waktu_pendirian', $pemohon->waktu_pendirian);
+        $templateProcessor->setValue('alamat_kantor', $pemohon->alamat_kantor);
+        $templateProcessor->setValue('opd', $pemohon->opd);
+        $templateProcessor->setValue('no_surat_dinas', $pemohon->no_surat_dinas);
+        $templateProcessor->setValue('tgl_surat_dinas', $pemohon->tgl_surat_dinas);
 
         // QR Code
-        $qrPath = storage_path('app/public/qr_'.$pemohon->id.'.png');
+        $qrPath = storage_path('app/public/qr_' . $pemohon->id . '.png');
         QrCode::format('png')->size(200)->generate($dataQr, $qrPath);
 
         $templateProcessor->setImageValue('qrcode', [
             'path' => $qrPath,
-            'width' => 100,
-            'height' => 100,
+            'width' => 50,
+            'height' => 50,
             'ratio' => false
         ]);
 
@@ -148,5 +158,4 @@ class DaftarPendaftaranController extends Controller
 
         return response()->download($savePath)->deleteFileAfterSend(true);
     }
-
 }

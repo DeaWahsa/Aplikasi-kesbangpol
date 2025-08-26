@@ -24,7 +24,7 @@ class PersyaratanController extends Controller
         ];
         // dd($menu);
         if ($request->ajax()) {
-            $data = M_persyaratan::latest()->get();
+            $data = M_persyaratan::where('is_delete', 0)->get();
             return DataTablesDataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -82,7 +82,11 @@ class PersyaratanController extends Controller
 
     public function destroy($id)
     {
-        M_persyaratan::find($id)->delete();
+        $persyaratan = M_persyaratan::findOrFail($id);
+        // dd($persyaratan);
+        $persyaratan->update([
+            'is_delete' => 1
+        ]);
         return response()->json(['success' => 'Data berhasil dihapus.']);
     }
 

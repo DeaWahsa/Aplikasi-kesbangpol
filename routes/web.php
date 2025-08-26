@@ -22,6 +22,7 @@ Route::get('/persyaratan/data', [PersyaratanController::class, 'getAll']);
 
 // 📋 Formulir Pendaftaran
 Route::resource('form-pendaftaran', FormPendaftaranController::class);
+Route::post('post-biodata', [FilePersyaratanController::class, 'store'])->name('post-biodata');
 Route::get('/get-desa/{kecamatan_id}', [FormPendaftaranController::class, 'getDesa']);
 
 // 📝 Daftar Pendaftaran — CUKUP SATU INI

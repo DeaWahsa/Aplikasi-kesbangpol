@@ -25,6 +25,7 @@ return new class extends Migration
             $table->json('checkbox')->nullable();
             $table->string('select')->nullable();
             $table->timestamps();
+            $table->string('nomor_registrasi')->unique()->nullable();
         });
     }
 
@@ -33,6 +34,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('m_formpendaftarans');
+        Schema::dropIfExists('m_formpendaftarans', function (Blueprint $table) {
+            $table->dropColumn('nomor_registrasi');
+        });
     }
 };

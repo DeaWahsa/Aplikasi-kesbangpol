@@ -35,19 +35,19 @@
                         <th class="text-muted" style="width: 40%">
                             <i class="bi bi-people me-2 text-success"></i> Kelompok Tani
                         </th>
-                        <td class="fw-semibold">: {{ $biodata->nama }}</td>
+                        <td class="fw-semibold">: {{ $biodata->nama_kelompok }}</td>
                     </tr>
                     <tr>
                         <th class="text-muted">
-                            <i class="bi bi-credit-card-2-front me-2 text-warning"></i> NIK
+                            <i class="bi bi-credit-card-2-front me-2 text-warning"></i> Bidang Kegiatan
                         </th>
-                        <td class="fw-semibold">: {{ $biodata->nik }}</td>
+                        <td class="fw-semibold">: {{ $biodata->bidang_kegiatan }}</td>
                     </tr>
                     <tr>
                         <th class="text-muted">
-                            <i class="bi bi-geo-alt me-2 text-danger"></i> Alamat
+                            <i class="bi bi-geo-alt me-2 text-danger"></i> Program Kerja
                         </th>
-                        <td class="fw-semibold">: {{ $biodata->alamat }}</td>
+                        <td class="fw-semibold">: {{ $biodata->program_kerja }}</td>
                     </tr>
                 </table>
             </div>
