@@ -24,72 +24,76 @@
         </div>
     </div>
     <div class="col-lg-4">
-    <div class="card shadow-sm border-0 rounded-3">
-        <div class="card-body">
-            
-            {{-- Logo Kelompok --}}
-            @if($biodata->logo_kelompok)
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body">
+
+                {{-- Logo Kelompok --}}
+                @if($biodata->logo_kelompok)
                 <div class="text-center mb-3 mt-3">
-                    <img src="{{ asset('uploads/logo_kelompok/' . $biodata->logo_kelompok) }}"
-                         alt="Logo Kelompok"
-                         class="img-fluid rounded-circle shadow-sm"
-                         style="max-width: 120px; max-height: 120px; object-fit: cover;">
+                    <img src="{{ asset('uploads/logo_kelompok/' . $biodata->logo_kelompok) }}" alt="Logo Kelompok" class="img-fluid rounded-circle shadow-sm" style="max-width: 120px; max-height: 120px; object-fit: cover;">
                 </div>
-            @endif
+                @endif
 
-            {{-- Judul Kartu --}}
-            <h5 class="card-title border-bottom pb-2 mb-3">
-                <i class="bi bi-person-badge me-2 text-primary"></i> Biodata
-            </h5>
+                {{-- Judul Kartu --}}
+                <h5 class="card-title border-bottom pb-2 mb-3">
+                    <i class="bi bi-person-badge me-2 text-primary"></i> Biodata
+                </h5>
 
-            {{-- Tabel Biodata --}}
-            <table class="table table-sm align-middle">
-                <tr>
-                    <th class="text-muted" style="width: 40%">
-                        <i class="bi bi-people me-2 text-success"></i> Kelompok Tani
-                    </th>
-                    <td class="fw-semibold">: {{ $biodata->nama_kelompok }}</td>
-                </tr>
-                  <tr>
-                    <th class="text-muted">
-                        <i class="bi bi-person-circle me-2 text-danger"></i> Ketua
-                    </th>
-                    <td class="fw-semibold">: {{ $biodata->nama_pendiri }}</td>
-                </tr>
-                <tr>
-                    <th class="text-muted">
-                        <i class="bi bi-person-circle me-2 text-primary"></i> Ketua
-                    </th>
-                    <td class="fw-semibold">: {{ $biodata->nama_ketua_pengurus }}</td>
-                </tr>
-                <tr>
-                    <th class="text-muted">
-                        <i class="bi bi-person-circle me-2 text-info"></i> Sekretaris
-                    </th>
-                    <td class="fw-semibold">: {{ $biodata->nama_sekretaris_pengurus }}</td>
-                </tr>
-                <tr>
-                    <th class="text-muted">
-                        <i class="bi bi-person-circle me-2 text-warning"></i> Bendahara
-                    </th>
-                    <td class="fw-semibold">: {{ $biodata->nama_bendahara_pengurus }}</td>
-                </tr>
-                <tr>
-                    <th class="text-muted">
-                        <i class="bi bi-credit-card-2-front me-2 text-warning"></i> Bidang Kegiatan
-                    </th>
-                    <td class="fw-semibold">: {{ $biodata->bidang_kegiatan }}</td>
-                </tr>
-                <tr>
-                    <th class="text-muted">
-                        <i class="bi bi-geo-alt me-2 text-danger"></i> Program Kerja
-                    </th>
-                    <td class="fw-semibold">: {{ $biodata->program_kerja }}</td>
-                </tr>
-            </table>
+                {{-- Tabel Biodata --}}
+                <table class="table table-sm align-middle">
+                    <tr>
+                        <th class="text-muted" style="width: 40%">
+                            <i class="bi bi-people me-2 text-success"></i> Kelompok Tani
+                        </th>
+                        <td class="fw-semibold">: {{ $biodata->nama_kelompok }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">
+                            <i class="bi bi-person-circle me-2 text-danger"></i> Ketua
+                        </th>
+                        <td class="fw-semibold">: {{ $biodata->nama_pendiri }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">
+                            <i class="bi bi-person-circle me-2 text-primary"></i> Ketua
+                        </th>
+                        <td class="fw-semibold">: {{ $biodata->nama_ketua_pengurus }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">
+                            <i class="bi bi-person-circle me-2 text-info"></i> Sekretaris
+                        </th>
+                        <td class="fw-semibold">: {{ $biodata->nama_sekretaris_pengurus }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">
+                            <i class="bi bi-person-circle me-2 text-warning"></i> Bendahara
+                        </th>
+                        <td class="fw-semibold">: {{ $biodata->nama_bendahara_pengurus }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">
+                            <i class="bi bi-credit-card-2-front me-2 text-warning"></i> Bidang Kegiatan
+                        </th>
+                        <td class="fw-semibold">: {{ $biodata->bidang_kegiatan }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">
+                            <i class="bi bi-geo-alt me-2 text-danger"></i> Program Kerja
+                        </th>
+                        <td class="fw-semibold">: {{ $biodata->program_kerja }}</td>
+                    </tr>
+                </table>
+
+                <div class="text-center mt-3">
+                    <button type="button" id="btnUpdate" class="btn btn-primary btn-sm">
+                        <i class="bi bi-pencil-square me-1"></i> Edit
+                    </button>
+                </div>
+
+            </div>
         </div>
     </div>
-</div>
 
 </div>
 

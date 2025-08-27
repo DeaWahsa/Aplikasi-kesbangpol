@@ -128,8 +128,10 @@ class FormPendaftaranController extends Controller
         $form->keputusan_kelompok = $request->keputusan_kelompok;
         $form->sumber_keuangan = $request->sumber_keuangan;
         $form->pekerjaan_ketua_pengurus = $request->pekerjaan_ketua_pengurus;
-        $form->status_kawin_sekertaris_pengurus = $request->status_kawin_sekertaris_pengurus;
+        $form->status_kawin_sekretaris_pengurus = $request->status_kawin_sekretaris_pengurus;
         $form->status_kawin_bendahara_pengurus = $request->status_kawin_bendahara_pengurus;
+        $form->id_desa = $request->id_desa;
+        $form->id_kecamatan = $request->id_kecamatan;
         $form->nomor_registrasi = $nomorReg; // langsung isi otomatis
         if ($request->hasFile('logo_kelompok')) {
             $file = $request->file('logo_kelompok');
