@@ -96,91 +96,134 @@
                 </div>
             </div>
         </div>
-        <div class="col-12">
-            <div class="card">
 
-                <div class="filter">
-                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                        <li class="dropdown-header text-start">
-                            <h6>Filter</h6>
-                        </li>
-
-                        <li><a class="dropdown-item" href="#">Today</a></li>
-                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                    </ul>
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Pendaftar per Kecamatan</h5>
+                        <div style="height:380px; overflow-x:auto;">
+                            <canvas id="chartPendaftaran"></canvas>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <div class="card-body">
-                    <h5 class="card-title">Reports <span>/Today</span></h5>
-
-                    <!-- Line Chart -->
-                    <div id="reportsChart"></div>
-
-                    <script>
-                    document.addEventListener("DOMContentLoaded", () => {
-                        new ApexCharts(document.querySelector("#reportsChart"), {
-                            series: [{
-                                name: 'Sales',
-                                data: [31, 40, 28, 51, 42, 82, 56],
-                            }, {
-                                name: 'Revenue',
-                                data: [11, 32, 45, 32, 34, 52, 41]
-                            }, {
-                                name: 'Customers',
-                                data: [15, 11, 32, 18, 9, 24, 11]
-                            }],
-                            chart: {
-                                height: 350,
-                                type: 'area',
-                                toolbar: {
-                                    show: false
-                                },
-                            },
-                            markers: {
-                                size: 4
-                            },
-                            colors: ['#4154f1', '#2eca6a', '#ff771d'],
-                            fill: {
-                                type: "gradient",
-                                gradient: {
-                                    shadeIntensity: 1,
-                                    opacityFrom: 0.3,
-                                    opacityTo: 0.4,
-                                    stops: [0, 90, 100]
-                                }
-                            },
-                            dataLabels: {
-                                enabled: false
-                            },
-                            stroke: {
-                                curve: 'smooth',
-                                width: 2
-                            },
-                            xaxis: {
-                                type: 'datetime',
-                                categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z",
-                                    "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z",
-                                    "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z",
-                                    "2018-09-19T06:30:00.000Z"
-                                ]
-                            },
-                            tooltip: {
-                                x: {
-                                    format: 'dd/MM/yy HH:mm'
-                                },
-                            }
-                        }).render();
-                    });
-                    </script>
-                    <!-- End Line Chart -->
-
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Pendaftar per Jenis Kelompok</h5>
+                        <div style="height:380px;">
+                            <canvas id="chartJenisKelompok"></canvas>
+                        </div>
+                    </div>
                 </div>
-
             </div>
         </div>
+
     </div>
 </div>
 
+@endsection
+@section('scripts')
+<script>
+    $(function() {
+        $.ajax({
+            url: "{{ route('chart.pendaftaran-per-kecamatan') }}",
+            type: "GET",
+            dataType: "json",
+            success: function(res) {
+                const ctx = document.getElementById('chartPendaftaran').getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: res.labels,
+                        datasets: [{
+                            label: 'Jumlah Pendaftar',
+                            data: res.data,
+                            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: 'x',
+                        scales: {
+                            x: {
+                                ticks: {
+                                    autoSkip: false,
+                                    maxRotation: 60,
+                                    minRotation: 30
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: true
+                            },
+                            tooltip: {
+                                enabled: true
+                            }
+                        }
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Gagal ambil data:", error);
+            }
+        });
+        $.ajax({
+            url: "{{ route('chart.pendaftaran-per-jenis-kelompok') }}",
+            type: "GET",
+            dataType: "json",
+            success: function(res) {
+                const ctx = document.getElementById('chartJenisKelompok').getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: res.labels,
+                        datasets: [{
+                            data: res.data,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.7)',
+                                'rgba(54, 162, 235, 0.7)',
+                                'rgba(255, 206, 86, 0.7)',
+                                'rgba(75, 192, 192, 0.7)',
+                                'rgba(153, 102, 255, 0.7)',
+                                'rgba(255, 159, 64, 0.7)'
+                            ],
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            },
+                            tooltip: {
+                                enabled: true
+                            }
+                        }
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Gagal ambil data piechart:", error);
+            }
+        });
+    });
+</script>
 @endsection

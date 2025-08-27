@@ -11,4 +11,9 @@ class M_kecamatan extends Model
     protected $table = 'm_kecamatan';
     protected $primaryKey = 'id';
     protected $guarded = ['id'];
+    
+    public function pendaftar()
+    {
+        return $this->hasMany(M_daftarpendaftaran::class, 'id_kecamatan');
+    }
 }
