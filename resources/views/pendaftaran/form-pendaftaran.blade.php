@@ -502,18 +502,26 @@
                         </div>
                     </div>
 
-                    <!-- {{-- Kecamatan --}}
+                    {{-- Kecamatan --}}
                     <div class="row mb-3">
                         <label class="col-sm-2 col-form-label">Kecamatan</label>
                         <div class="col-sm-10">
-                            <select id="kecamatan" name="kecamatan" class="form-select" >
+                            <select id="kecamatan" name="id_kecamatan" class="form-select" >
                                 <option value="">-- Pilih Kecamatan --</option>
                                 @foreach($kecamatan as $u)
                                 <option value="{{$u->id}}">{{$u->nama_kecamatan}}</option>
                                 @endforeach
                             </select>
                         </div>
-                    </div> -->
+                    </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label">Desa</label>
+                        <div class="col-sm-10">
+                            <select id="desa" name="id_desa" class="form-select" >
+                                <option value="">-- Pilih Kecamatan --</option>
+                            </select>
+                        </div>
+                    </div>
 
                     <div class="row mb-3">
                         <label class="col-sm-2 col-form-label">Jenis Kelompok Tani</label>
