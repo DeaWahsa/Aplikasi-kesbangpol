@@ -27,7 +27,7 @@ class FilePersyaratanController extends Controller
         $id_pendaftaran = $id;
         $biodata = M_daftarpendaftaran::where('id', $id_pendaftaran)->first();
 
-        $data =[
+        $data = [
             'menu' => $menu,
             'submenu' => $submenu,
             'id_pendaftaran' => $id,
@@ -37,7 +37,7 @@ class FilePersyaratanController extends Controller
         if ($request->ajax()) {
             $data = M_persyaratan::leftJoin('m_filepersyaratan', function ($join) use ($id) {
                 $join->on('m_filepersyaratan.id_persyaratan', '=', 'tabel_persyaratan.id')
-                    ->where('m_filepersyaratan.id_pendaftaran', '=', $id); // filter sesuai pendaftaran
+                    ->where('m_filepersyaratan.id_pendaftaran', '=', $id);
             })
                 ->select(
                     'tabel_persyaratan.*',
@@ -46,6 +46,7 @@ class FilePersyaratanController extends Controller
                     'm_filepersyaratan.nama_media',
                     'm_filepersyaratan.status'
                 )
+                ->where('tabel_persyaratan.is_delete', 0) 
                 ->get();
 
             return DataTables::of($data)
@@ -108,14 +109,14 @@ class FilePersyaratanController extends Controller
     public function store(Request $request, $id)
     {
         // dd($request->id_pendaftaran);
-        
+
         // $request->validate([
         //     'file' => 'required|file|mimes:pdf,png,jpg,jpeg|max:2048',
         //     'id_pendaftaran' => 'required|integer',
         //     'id_persyaratan' => 'required|integer',
         // ]);
         $rules = [
-            'file' => 'required|mimes:pdf|max:500', 
+            'file' => 'required|mimes:pdf,jpg,png|max:500',
         ];
 
         $messages = [
@@ -126,39 +127,38 @@ class FilePersyaratanController extends Controller
 
         $validator = Validator::make($request->all(), $rules, $messages);
 
-		if ($validator->fails()) {
+        if ($validator->fails()) {
 
-			return response()->json([
-				"message" => implode("<br>", Arr::flatten($validator->errors()->all()))
-			], 422);
+            return response()->json([
+                "message" => implode("<br>", Arr::flatten($validator->errors()->all()))
+            ], 422);
+        } else {
 
-		}else{
-
-        $media = M_filepersyaratan::where('id_persyaratan', $request->id_persyaratan)
+            $media = M_filepersyaratan::where('id_persyaratan', $request->id_persyaratan)
                 ->where('id_pendaftaran', $request->id_pendaftaran)
                 ->first();
-        $uploadedFile = $request->file('file');
-        $fileName = time() . '_' . $uploadedFile->getClientOriginalName();
-        $newPath = $uploadedFile->storeAs('uploads', $fileName, 'public');
+            $uploadedFile = $request->file('file');
+            $fileName = time() . '_' . $uploadedFile->getClientOriginalName();
+            $newPath = $uploadedFile->storeAs('uploads', $fileName, 'public');
 
-        if ($media) {
-            // simpan nama file lama sebelum di-update
-            $oldFileName = $media->nama_media; // di DB kamu simpan nama saja, bukan path
+            if ($media) {
+                // simpan nama file lama sebelum di-update
+                $oldFileName = $media->nama_media; // di DB kamu simpan nama saja, bukan path
 
-            // update record
-            $media->update([
-                'nama_media'         => $fileName,
-                'type'               => $uploadedFile->getMimeType(),
-                'ext'                => $uploadedFile->getClientOriginalExtension(),
-                'original_file_name' => $uploadedFile->getClientOriginalName(),
-                'status'=> 0
-                // 'updated_at' otomatis kalau timestamps true
-            ]);
+                // update record
+                $media->update([
+                    'nama_media'         => $fileName,
+                    'type'               => $uploadedFile->getMimeType(),
+                    'ext'                => $uploadedFile->getClientOriginalExtension(),
+                    'original_file_name' => $uploadedFile->getClientOriginalName(),
+                    'status' => 0
+                    // 'updated_at' otomatis kalau timestamps true
+                ]);
 
-            // hapus file lama jika ada
-            if ($oldFileName && Storage::disk('public')->exists('uploads/'.$oldFileName)) {
-                Storage::disk('public')->delete('uploads/'.$oldFileName);
-            }
+                // hapus file lama jika ada
+                if ($oldFileName && Storage::disk('public')->exists('uploads/' . $oldFileName)) {
+                    Storage::disk('public')->delete('uploads/' . $oldFileName);
+                }
             } else {
                 // create record baru
                 M_filepersyaratan::create([
@@ -170,34 +170,33 @@ class FilePersyaratanController extends Controller
                     'original_file_name' => $uploadedFile->getClientOriginalName(),
                 ]);
             }
-                $totalSyarat   = M_persyaratan::count(); 
-                $totalUploaded = M_filepersyaratan::where('id_pendaftaran', $request->id_pendaftaran)->count();
+            $totalSyarat   = M_persyaratan::where('is_delete', 0)->count();
+           
+            $totalUploaded = M_filepersyaratan::where('id_pendaftaran', $request->id_pendaftaran)->count();
+            //  dd($totalUploaded);
+            if ($totalUploaded >= $totalSyarat) {
+                $files = M_filepersyaratan::where('id_pendaftaran', $request->id_pendaftaran)->get();
 
-                if ($totalUploaded >= $totalSyarat) {
-                    $files = M_filepersyaratan::where('id_pendaftaran', $request->id_pendaftaran)->get();
+                $adaDitolak    = $files->contains(fn($f) => $f->status == 1);   // cek ada yg ditolak
+                $semuaDiterima = $files->every(fn($f) => $f->status == 2);     // cek semua sudah diverifikasi
 
-                    $adaDitolak    = $files->contains(fn($f) => $f->status == 1);   // cek ada yg ditolak
-                    $semuaDiterima = $files->every(fn($f) => $f->status == 2);     // cek semua sudah diverifikasi
-
-                    if ($adaDitolak) {
-                        $status = 2; // ditolak
-                    } elseif ($semuaDiterima) {
-                        $status = 1; // semua diverifikasi
-                    } else {
-                        $status = 3; // sudah upload semua, tunggu verifikasi
-                    }
-
-                    M_formpendaftaran::where('id', $request->id_pendaftaran)
-                        ->update(['status' => $status]);
+                if ($adaDitolak) {
+                    $status = 2; // ditolak
+                } elseif ($semuaDiterima) {
+                    $status = 1; // semua diverifikasi
+                } else {
+                    $status = 3; // sudah upload semua, tunggu verifikasi
                 }
 
-
+                M_formpendaftaran::where('id', $request->id_pendaftaran)
+                    ->update(['status' => $status]);
             }
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Berhasil Mengaupload Berkas',
-                ], 200);
-            }
+        }
+        return response()->json([
+            'success' => true,
+            'message' => 'Berhasil Mengaupload Berkas',
+        ], 200);
+    }
 
     /**
      * Tampilkan detail file persyaratan tertentu.
@@ -237,7 +236,7 @@ class FilePersyaratanController extends Controller
         $persyaratan->save();
 
         // cek jumlah syarat & status form pendaftaran
-        $totalSyarat   = M_persyaratan::count(); 
+        $totalSyarat   = M_persyaratan::where('is_delete', 0)->count();
         $totalUploaded = M_filepersyaratan::where('id_pendaftaran', $persyaratan->id_pendaftaran)->count();
 
         if ($totalUploaded >= $totalSyarat) {

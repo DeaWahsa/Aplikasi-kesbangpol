@@ -148,8 +148,8 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: `{{ url('persyaratan') }}/${id}/edit`,
-
+                        url: `{{ url('persyaratan') }}/${id}`,
+                        type: "DELETE",
                         data: {
                             _token: '{{ csrf_token() }}'
                         },

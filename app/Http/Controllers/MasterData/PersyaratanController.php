@@ -83,11 +83,9 @@ class PersyaratanController extends Controller
     public function destroy($id)
     {
         $persyaratan = M_persyaratan::findOrFail($id);
-        // dd($persyaratan);
-        $persyaratan->update([
-            'is_delete' => 1
-        ]);
-        return response()->json(['success' => 'Data berhasil dihapus.']);
+        $persyaratan->update(['is_delete' => 1]);
+
+        return response()->json(['success' => true]);
     }
 
     public function getAll(Request $request)
