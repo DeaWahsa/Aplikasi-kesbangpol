@@ -781,6 +781,9 @@
 
   <!-- Main JS File -->
   <script src="{{asset('/')}}landing/assets/js/main.js"></script>
+  <script src="https://code.responsivevoice.org/responsivevoice.js?key=bzbTAKXD"></script> 
+<script type="text/javascript" src="https://web.animemusic.us/widget_disabilitas.js"></script>
+
 
 </body>
 
