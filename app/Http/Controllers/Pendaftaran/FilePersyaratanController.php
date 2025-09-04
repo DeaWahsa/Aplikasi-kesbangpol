@@ -12,8 +12,10 @@ use App\Http\Controllers\Pendaftaran\PersyaratanController;
 use App\Models\M_daftarpendaftaran;
 use App\Models\M_formpendaftaran;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Psy\Readline\Hoa\Console;
 
 class FilePersyaratanController extends Controller
 {
@@ -46,7 +48,7 @@ class FilePersyaratanController extends Controller
                     'm_filepersyaratan.nama_media',
                     'm_filepersyaratan.status'
                 )
-                ->where('tabel_persyaratan.is_delete', 0) 
+                ->where('tabel_persyaratan.is_delete', 0)
                 ->get();
 
             return DataTables::of($data)
@@ -171,7 +173,7 @@ class FilePersyaratanController extends Controller
                 ]);
             }
             $totalSyarat   = M_persyaratan::where('is_delete', 0)->count();
-           
+
             $totalUploaded = M_filepersyaratan::where('id_pendaftaran', $request->id_pendaftaran)->count();
             //  dd($totalUploaded);
             if ($totalUploaded >= $totalSyarat) {
@@ -216,6 +218,7 @@ class FilePersyaratanController extends Controller
             'data' => $data // jika kamu butuh semua datanya
         ]);
     }
+    
 
     public function verifikasi(Request $request, $id)
     {
@@ -282,5 +285,58 @@ class FilePersyaratanController extends Controller
     public function destroy(M_filepersyaratan $m_filepersyaratan)
     {
         //jakjdksjdak
+    }
+
+    public function renderEditForm($id)
+    {
+        $biodata = M_formpendaftaran::findOrFail($id);
+        // dd($biodata);
+
+        // return blade editform, isinya HTML siap dipakai AJAX
+        return view('pendaftaran.edit-formpendaftaran', compact('biodata'));
+    }
+
+    public function updateBiodata(Request $request, $id)
+    {
+        // dd(123);
+        try {
+
+            // Validasi file
+            // $rules = [
+            //     'logo_kelompok' => 'required|mimes:pdf,jpg,png|max:500',
+            // ];
+            // $request->validate($rules);
+
+            Log::info('Update biodata', $request->all());
+
+            $biodata = M_formpendaftaran::findOrFail($id);
+
+            // Jika ada file logo baru
+            if ($request->hasFile('logo_kelompok')) {
+                $file = $request->file('logo_kelompok');
+                $filename = time() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('uploads/logo_kelompok'), $filename);
+                $biodata->logo_kelompok = $filename;
+            }
+
+            // Update field lain (kecuali logo_kelompok biar tidak ketimpa null)
+            $biodata->fill($request->except('logo_kelompok'));
+            $biodata->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data biodata berhasil diperbarui',
+                'id' => $biodata->id,  // tambahkan ID agar bisa dipakai di AJAX
+                'data' => $biodata->only(
+                    ['id', 'nama_kelompok', 'logo_kelompok', 'nama_pendiri', 'nama_ketua_pengurus', 'nama_sekretaris_pengurus', 'nama_bendahara_pengurus', 'bidang_kegiatan', 'program_kerja'])
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Gagal update biodata: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan saat menyimpan data'
+            ], 500);
+        }
     }
 }

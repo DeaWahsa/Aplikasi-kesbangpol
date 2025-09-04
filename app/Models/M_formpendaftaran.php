@@ -74,4 +74,5 @@ class M_formpendaftaran extends Model
         'sumber_keuangan',
         'logo_kelompok',
     ];
+
 }
