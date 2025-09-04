@@ -321,7 +321,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.datatables.net/2.3.2/js/dataTables.min.js"></script>
    <script src="{{ asset('assets/vendor/waitMe/waitMe.min.js') }}"></script>
-   <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 
     <script>
          function myLoader(element, message) {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Pendaftaran;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Pendaftaran\FormPendaftaran;
 use App\Models\M_desa;
 use App\Models\M_formpendaftaran;
 use App\Models\M_kecamatan;
@@ -17,12 +18,14 @@ class FormPendaftaranController extends Controller
         $menu = "pendaftaran";
         $submenu = "form-pendaftaran";
         $kecamatan = M_kecamatan::all();
+        $desa = M_desa::all();
         $jenisKelompok = M_jeniskelompok::all();
 
         $data = [
             'menu' => $menu,
             'submenu' => $submenu,
             'kecamatan' => $kecamatan,
+            'desa' => $desa,
             'jenisKelompok' => $jenisKelompok,
         ];
 
@@ -35,9 +38,15 @@ class FormPendaftaranController extends Controller
     }
 
 
-    public function getDesa($kecamatan_id)
+    public function getKecamatan($kecamatan_id)
     {
-        $desa = M_desa::where('kecamatan_id', $kecamatan_id)->get();
+        $kecamatan = M_desa::where('kecamatan_id', $kecamatan_id)->get();
+        return response()->json($kecamatan);
+    }
+
+    public function getDesa($desa_id)
+    {
+        $desa = M_desa::where('desa_id', $desa_id)->get();
         return response()->json($desa);
     }
 
@@ -49,6 +58,13 @@ class FormPendaftaranController extends Controller
 
         return 'REG' . date('Ymd') . str_pad($nextId, 4, '0', STR_PAD_LEFT);
     }
+
+    public function edit($id)
+    {
+        $data = M_formpendaftaran::findOrFail($id);
+        return view('pendaftaran.edit-formpendaftaran', compact('data'));
+    }
+
 
     public function store(Request $request)
     {

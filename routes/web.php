@@ -6,38 +6,48 @@ use App\Http\Controllers\Pendaftaran\FilePersyaratanController;
 use App\Http\Controllers\MasterData\PersyaratanController;
 use App\Http\Controllers\Pendaftaran\DaftarPendaftaranController;
 use App\Http\Controllers\Pendaftaran\FormPendaftaranController;
+use Faker\Core\File;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth'])->group(function(){
-// 🏠 Dashboard
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-// 📄 Persyaratan
-Route::resource('persyaratan', PersyaratanController::class);
-Route::get('/persyaratan/data', [PersyaratanController::class, 'getAll']);
+Route::middleware(['auth'])->group(function () {
+  // 🏠 Dashboard
+  Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-// 📋 Formulir Pendaftaran
-Route::resource('form-pendaftaran', FormPendaftaranController::class);
-Route::post('post-biodata', [FilePersyaratanController::class, 'store'])->name('post-biodata');
-Route::get('/get-desa/{kecamatan_id}', [FormPendaftaranController::class, 'getDesa']);
+  // 📄 Persyaratan
+  Route::resource('persyaratan', PersyaratanController::class);
+  Route::get('/persyaratan/data', [PersyaratanController::class, 'getAll']);
 
-// 📝 Daftar Pendaftaran — CUKUP SATU INI
-Route::resource('daftar-pendaftaran', DaftarPendaftaranController::class);
+  // 📋 Formulir Pendaftaran
+  // Route::get('/formpendaftaran/{id}/edit', [FormPendaftaranController::class, 'edit'])->name('formpendaftaran.edit');
+  Route::get('/pendaftaran/{id}/editform', [FilePersyaratanController::class, 'renderEditForm'])
+    ->name('pendaftaran.renderEditForm');
 
-// Route::get('file-persyaratan/{id}', FilePersyaratanController::class, 'index');
-Route::get('/file-persyaratan/{id}', [FilePersyaratanController::class, 'index'])->name('file-persyaratan.show');
+  Route::resource('form-pendaftaran', FormPendaftaranController::class);
 
-Route::post('/upload-file-persyaratan/{id}', [FilePersyaratanController::class, 'store']);
 
-Route::resource('file-persyaratan', FilePersyaratanController::class);
+  Route::post('post-biodata', [FilePersyaratanController::class, 'store'])->name('post-biodata');
 
-Route::post('/verifikasi-persyaratan/{id}', [FilePersyaratanController::class, 'verifikasi']);
+  Route::get('/get-desa/{kecamatan_id}', [FormPendaftaranController::class, 'getDesa']);
+
+  // 📝 Daftar Pendaftaran — CUKUP SATU INI
+  Route::resource('daftar-pendaftaran', DaftarPendaftaranController::class);
+
+  // Route::get('file-persyaratan/{id}', FilePersyaratanController::class, 'index');
+  Route::get('/file-persyaratan/{id}', [FilePersyaratanController::class, 'index'])->name('file-persyaratan.show');
+
+  Route::post('/file-persyaratan/{id}/updateBiodata', [FilePersyaratanController::class, 'updateBiodata'])
+    ->name('file-persyaratan.updateBiodata');
+
+  Route::post('/upload-file-persyaratan/{id}', [FilePersyaratanController::class, 'store']);
+
+  Route::resource('file-persyaratan', FilePersyaratanController::class);
+
+  Route::post('/verifikasi-persyaratan/{id}', [FilePersyaratanController::class, 'verifikasi']);
 
   Route::get('/cetak-pemohon/{id}', [DaftarPendaftaranController::class, 'cetak_pemohon'])->name('cetakPemohon');
- 
-
 });

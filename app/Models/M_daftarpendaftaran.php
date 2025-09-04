@@ -9,10 +9,5 @@ class M_daftarpendaftaran extends Model
 {
     use HasFactory;
     protected $table = 'm_formpendaftaran';
-   protected $primaryKey = 'id';
-
-    public function kecamatan()
-    {
-        return $this->belongsTo(M_kecamatan::class, 'id_kecamatan');
-    }
+    protected $fillable = ['nama', 'nik', 'alamat'];
 }
