@@ -1,7 +1,7 @@
 /**
-* Template Name: Impact
-* Template URL: https://bootstrapmade.com/impact-bootstrap-business-website-template/
-* Updated: Aug 07 2024 with Bootstrap v5.3.3
+* Template Name: Devin
+* Template URL: https://bootstrapmade.com/devin-bootstrap-template/
+* Updated: Jul 23 2025 with Bootstrap v5.3.7
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
 */
@@ -32,7 +32,9 @@
     mobileNavToggleBtn.classList.toggle('bi-list');
     mobileNavToggleBtn.classList.toggle('bi-x');
   }
-  mobileNavToggleBtn.addEventListener('click', mobileNavToogle);
+  if (mobileNavToggleBtn) {
+    mobileNavToggleBtn.addEventListener('click', mobileNavToogle);
+  }
 
   /**
    * Hide mobile nav on same-page/hash links
@@ -88,19 +90,6 @@
 
   window.addEventListener('load', toggleScrollTop);
   document.addEventListener('scroll', toggleScrollTop);
-
-  /**
-   * Animation on scroll function and init
-   */
-  function aosInit() {
-    AOS.init({
-      duration: 600,
-      easing: 'ease-in-out',
-      once: true,
-      mirror: false
-    });
-  }
-  window.addEventListener('load', aosInit);
 
   /**
    * Initiate glightbox
@@ -166,10 +155,40 @@
 
   });
 
+  /*
+   * Pricing Toggle
+   */
+
+  const pricingContainers = document.querySelectorAll('.pricing-toggle-container');
+
+  pricingContainers.forEach(function(container) {
+    const pricingSwitch = container.querySelector('.pricing-toggle input[type="checkbox"]');
+    const monthlyText = container.querySelector('.monthly');
+    const yearlyText = container.querySelector('.yearly');
+
+    pricingSwitch.addEventListener('change', function() {
+      const pricingItems = container.querySelectorAll('.pricing-item');
+
+      if (this.checked) {
+        monthlyText.classList.remove('active');
+        yearlyText.classList.add('active');
+        pricingItems.forEach(item => {
+          item.classList.add('yearly-active');
+        });
+      } else {
+        monthlyText.classList.add('active');
+        yearlyText.classList.remove('active');
+        pricingItems.forEach(item => {
+          item.classList.remove('yearly-active');
+        });
+      }
+    });
+  });
+
   /**
    * Frequently Asked Questions Toggle
    */
-  document.querySelectorAll('.faq-item h3, .faq-item .faq-toggle').forEach((faqItem) => {
+  document.querySelectorAll('.faq-item h3, .faq-item .faq-toggle, .faq-item .faq-header').forEach((faqItem) => {
     faqItem.addEventListener('click', () => {
       faqItem.parentNode.classList.toggle('faq-active');
     });
