@@ -24,7 +24,7 @@ class DaftarPendaftaranController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $btn  = '<div class="btn-group" role="group">';
-                    $btn .= '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-primary btn-sm editPendaftaran"><i class="ri-edit-2-line"></i></a>';
+                    // $btn .= '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-primary btn-sm editPendaftaran"><i class="ri-edit-2-line"></i></a>';
                     $btn .= '<a href="' . route('file-persyaratan.show', $row->id) . '" class="btn btn-info btn-sm"><i class="ri-file-3-fill"></i></a>';
                     $btn .= '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-danger btn-sm deletePendaftaran"><i class="ri-delete-bin-5-line"></i></a>';
                     $btn .= '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-warning btn-sm cetak"><i class="ri-file-word-line"></i></a>';

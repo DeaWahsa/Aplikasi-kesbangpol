@@ -173,6 +173,7 @@ class FilePersyaratanController extends Controller
                 ]);
             }
             $totalSyarat   = M_persyaratan::where('is_delete', 0)->count();
+            // dd($totalSyarat);
 
             $totalUploaded = M_filepersyaratan::where('id_pendaftaran', $request->id_pendaftaran)->count();
             //  dd($totalUploaded);
@@ -218,7 +219,7 @@ class FilePersyaratanController extends Controller
             'data' => $data // jika kamu butuh semua datanya
         ]);
     }
-    
+
 
     public function verifikasi(Request $request, $id)
     {
@@ -328,7 +329,8 @@ class FilePersyaratanController extends Controller
                 'message' => 'Data biodata berhasil diperbarui',
                 'id' => $biodata->id,  // tambahkan ID agar bisa dipakai di AJAX
                 'data' => $biodata->only(
-                    ['id', 'nama_kelompok', 'logo_kelompok', 'nama_pendiri', 'nama_ketua_pengurus', 'nama_sekretaris_pengurus', 'nama_bendahara_pengurus', 'bidang_kegiatan', 'program_kerja'])
+                    ['id', 'nama_kelompok', 'logo_kelompok', 'nama_pendiri', 'nama_ketua_pengurus', 'nama_sekretaris_pengurus', 'nama_bendahara_pengurus', 'bidang_kegiatan', 'program_kerja']
+                )
             ]);
         } catch (\Exception $e) {
             Log::error('Gagal update biodata: ' . $e->getMessage());
