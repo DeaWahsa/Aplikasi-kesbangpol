@@ -50,9 +50,7 @@ return [
              *
              */
 
-           'credentials' => [
-    'file' => storage_path('firebase/informasi-juara-firebase-adminsdk-fbsvc-304f629ef5.json'),
-],
+           'credentials' => env('FIREBASE_CREDENTIALS'),
 
             /*
              * ------------------------------------------------------------------------
