@@ -9,6 +9,7 @@ use App\Http\Controllers\Pendaftaran\DaftarPendaftaranController;
 use App\Http\Controllers\Pendaftaran\FormPendaftaranController;
 use App\Http\Controllers\PendaftaranMandiriController;
 use Faker\Core\File;
+use Kreait\Firebase\Factory;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +63,16 @@ Route::middleware(['auth'])->group(function () {
         return response()->json(['status' => 'ok', 'file_size' => filesize($path)]);
     }
     return response()->json(['status' => 'not found']);
+});
+
+Route::get('/test-firebase3', function () {
+    try {
+        $factory = (new Factory)->withServiceAccount(env('FIREBASE_CREDENTIALS'));
+        $messaging = $factory->createMessaging();
+        return response()->json(['status' => 'Firebase connected']);
+    } catch (\Throwable $e) {
+        return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+    }
 });
 
 });
