@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Pendaftaran Step by Step</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-     <link href="{{ asset('assets/vendor/waitMe/waitMe.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/waitMe/waitMe.min.css') }}" rel="stylesheet">
     <style>
         body {
             background: url("{{ asset('assets/bg 2.jpg') }}") no-repeat center center fixed;
@@ -148,7 +148,12 @@
             }
 
             .form-label {
-                font-size: 14px;
+                color: #ffffff !important;
+                /* Putih */
+                font-weight: 600;
+                /* Sedikit tebal */
+                text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+                /* Biar jelas di atas background */
             }
 
             input,
@@ -309,23 +314,23 @@
     <script src="{{ asset('assets/vendor/waitMe/waitMe.min.js') }}"></script>
 
     <script>
-         function myLoader(element, message) {
-        bgLoading = 'rgba(255,255,255,0.8)';
-        colorLoading = '#000';
+        function myLoader(element, message) {
+            bgLoading = 'rgba(255,255,255,0.8)';
+            colorLoading = '#000';
 
-        $(element).waitMe({
-            effect: 'win8_linear',
-            text: message,
-            color: colorLoading,
-            bg: bgLoading,
-            maxSize: '',
-            // waitTime: 3000,
-            textPos: 'vertical',
-            fontSize: '10pt',
-            // source: "{{ asset('logo/ezgif-5-cd5e3bb456.gif') }}",
-            onClose: function() {}
-        });
-    }
+            $(element).waitMe({
+                effect: 'win8_linear',
+                text: message,
+                color: colorLoading,
+                bg: bgLoading,
+                maxSize: '',
+                // waitTime: 3000,
+                textPos: 'vertical',
+                fontSize: '10pt',
+                // source: "{{ asset('logo/ezgif-5-cd5e3bb456.gif') }}",
+                onClose: function() {}
+            });
+        }
     </script>
     <script>
         let currentStep = 1;

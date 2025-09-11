@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Juara\EventController;
 use App\Http\Controllers\Pendaftaran\FilePersyaratanController;
 use App\Http\Controllers\MasterData\PersyaratanController;
 use App\Http\Controllers\Pendaftaran\DaftarPendaftaranController;
@@ -51,6 +52,10 @@ Route::middleware(['auth'])->group(function () {
   Route::post('/verifikasi-persyaratan/{id}', [FilePersyaratanController::class, 'verifikasi']);
 
   Route::get('/cetak-pemohon/{id}', [DaftarPendaftaranController::class, 'cetak_pemohon'])->name('cetakPemohon');
+   
+  Route::get('/events', [EventController::class, 'index'])->name('events.index'); // daftar event
+  Route::get('/events/create', [EventController::class, 'create'])->name('events.create'); // form tambah event
+  Route::post('/events', [EventController::class, 'store'])->name('events.store'); // simpan event + kirim notifikasi
 });
 Route::get('/pendaftaran-mandiri', [PendaftaranMandiriController::class, 'index'])->name('pendaftaranMandiri.index');
 Route::post('/pendaftaran/store', [PendaftaranMandiriController::class, 'store'])->name('pendaftaranMandiri.store');
