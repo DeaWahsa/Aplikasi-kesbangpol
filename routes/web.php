@@ -6,6 +6,7 @@ use App\Http\Controllers\Pendaftaran\FilePersyaratanController;
 use App\Http\Controllers\MasterData\PersyaratanController;
 use App\Http\Controllers\Pendaftaran\DaftarPendaftaranController;
 use App\Http\Controllers\Pendaftaran\FormPendaftaranController;
+use App\Http\Controllers\PendaftaranMandiriController;
 use Faker\Core\File;
 
 /*
@@ -51,3 +52,7 @@ Route::middleware(['auth'])->group(function () {
 
   Route::get('/cetak-pemohon/{id}', [DaftarPendaftaranController::class, 'cetak_pemohon'])->name('cetakPemohon');
 });
+Route::get('/pendaftaran-mandiri', [PendaftaranMandiriController::class, 'index'])->name('pendaftaranMandiri.index');
+Route::post('/pendaftaran/store', [PendaftaranMandiriController::class, 'store'])->name('pendaftaranMandiri.store');
+
+

@@ -146,6 +146,7 @@
           <li class="nav-item"><a class="nav-link" href="#tentang">Tentang</a></li>
           <li class="nav-item"><a class="nav-link" href="#informasi">Informasi</a></li>
           <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{url('pendaftaran-mandiri')}}">pendaftaran</a></li>
           <li class="nav-item"><a class="nav-link" href="{{url('login-page')}}">Login</a></li>
         </ul>
       </div>
@@ -157,7 +158,7 @@
     <div class="hero-content container">
       <h1 class="display-4 fw-bold animate-text">Selamat Datang di SIELOK</h1>
       <p class="lead">Sistem Informasi Layanan Kelompok</p>
-      <a href="#informasi" class="btn btn-light btn-lg mt-3">Pelajari Lebih Lanjut</a>
+      <a href="{{url('pendaftaran-mandiri')}}" class="btn btn-light btn-lg mt-3">Daftar Disini</a>
     </div>
   </section>
 
