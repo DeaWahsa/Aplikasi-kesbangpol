@@ -56,6 +56,14 @@ Route::middleware(['auth'])->group(function () {
   Route::get('/events', [EventController::class, 'index'])->name('events.index'); // daftar event
   Route::get('/events/create', [EventController::class, 'create'])->name('events.create'); // form tambah event
   Route::post('/events', [EventController::class, 'store'])->name('events.store'); // simpan event + kirim notifikasi
+  Route::get('/test-firebase', function () {
+    $path = env('FIREBASE_CREDENTIALS');
+    if (file_exists($path)) {
+        return response()->json(['status' => 'ok', 'file_size' => filesize($path)]);
+    }
+    return response()->json(['status' => 'not found']);
+});
+
 });
 Route::get('/pendaftaran-mandiri', [PendaftaranMandiriController::class, 'index'])->name('pendaftaranMandiri.index');
 Route::post('/pendaftaran/store', [PendaftaranMandiriController::class, 'store'])->name('pendaftaranMandiri.store');
