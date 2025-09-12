@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\SendNotification;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Juara\EventController;
@@ -78,5 +79,8 @@ Route::get('/test-firebase3', function () {
 });
 Route::get('/pendaftaran-mandiri', [PendaftaranMandiriController::class, 'index'])->name('pendaftaranMandiri.index');
 Route::post('/pendaftaran/store', [PendaftaranMandiriController::class, 'store'])->name('pendaftaranMandiri.store');
-
+Route::get('/test-notif', function () {
+    event(new SendNotification("Halo Flutter", "Ini notifikasi real-time dari Laravel Reverb"));
+    return "Notifikasi terkirim!";
+});
 
