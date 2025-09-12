@@ -11,6 +11,7 @@ use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
 use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Exception\FirebaseException;
+use Kreait\Firebase\Messaging\MulticastMessage;
 
 class EventController extends Controller
 {
@@ -52,20 +53,21 @@ class EventController extends Controller
                     $event->deskripsi ?? 'Ada event baru!'
                 );
 
+                // 🔥 CloudMessage + Multicast
                 $message = CloudMessage::new()
                     ->withNotification($notification)
                     ->withData(['id' => (string) $event->id]);
 
                 $messaging = app('firebase.messaging');
+
+                // ✅ Kirim ke banyak token
                 $report = $messaging->sendMulticast($message, $tokens);
 
-                // ✅ Log hasil
                 Log::info("Notifikasi dikirim: {$report->successes()->count()} sukses, {$report->failures()->count()} gagal");
 
-                // ✅ Hapus token invalid/expired dari database
+                // ✅ Hapus token invalid
                 foreach ($report->failures()->getItems() as $failure) {
                     $invalidToken = $failure->target()->value();
-
                     Log::warning("Menghapus token invalid: {$invalidToken}");
                     FcmToken::where('token', $invalidToken)->delete();
                 }
