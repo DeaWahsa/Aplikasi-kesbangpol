@@ -53,10 +53,13 @@ class EventController extends Controller
                     $event->deskripsi ?? 'Ada event baru!'
                 );
 
-                // 🔥 CloudMessage + Multicast
+                // 🔥 Buat pesan
                 $message = CloudMessage::new()
                     ->withNotification($notification)
-                    ->withData(['id' => (string) $event->id]);
+                    ->withData([
+                        'id' => (string) $event->id,
+                        'click_action' => 'FLUTTER_NOTIFICATION_CLICK'
+                    ]);
 
                 $messaging = app('firebase.messaging');
 
@@ -65,11 +68,10 @@ class EventController extends Controller
 
                 Log::info("Notifikasi dikirim: {$report->successes()->count()} sukses, {$report->failures()->count()} gagal");
 
-                // ✅ Hapus token invalid
+                // ✅ Cuma log token gagal, jangan hapus dulu
                 foreach ($report->failures()->getItems() as $failure) {
-                    $invalidToken = $failure->target()->value();
-                    Log::warning("Menghapus token invalid: {$invalidToken}");
-                    FcmToken::where('token', $invalidToken)->delete();
+                    $failedToken = $failure->target()->value();
+                    Log::warning("Token gagal: {$failedToken}, error: " . $failure->error()->getMessage());
                 }
             } catch (MessagingException | FirebaseException $e) {
                 Log::error("Gagal mengirim notifikasi: {$e->getMessage()}");
@@ -77,6 +79,6 @@ class EventController extends Controller
         }
 
         return redirect()->route('events.index')
-            ->with('success', 'Event berhasil dibuat dan notifikasi terkirim!');
+            ->with('success', 'Event berhasil dibuat dan notifikasi dicoba dikirim!');
     }
 }
