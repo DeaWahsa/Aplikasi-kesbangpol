@@ -45,19 +45,32 @@ class EventController extends Controller
 
         $tokens = FcmToken::pluck('token')->toArray();
 
-        foreach ($tokens as $token) {
+        if (!empty($tokens)) {
             try {
+                $notification = Notification::create(
+                    'Event Baru: ' . $event->nama_event,
+                    $event->deskripsi ?? 'Ada event baru!'
+                );
+
                 $message = CloudMessage::new()
-                    ->toToken($token) // ✅ pengganti resmi
-                    ->withNotification(Notification::create(
-                        'Event Baru: ' . $event->nama_event,
-                        $event->deskripsi ?? 'Ada event baru!'
-                    ))
+                    ->withNotification($notification)
                     ->withData(['id' => (string) $event->id]);
 
-                app('firebase.messaging')->send($message);
+                $messaging = app('firebase.messaging');
+                $report = $messaging->sendMulticast($message, $tokens);
+
+                // ✅ Log hasil
+                Log::info("Notifikasi dikirim: {$report->successes()->count()} sukses, {$report->failures()->count()} gagal");
+
+                // ✅ Hapus token invalid/expired dari database
+                foreach ($report->failures()->getItems() as $failure) {
+                    $invalidToken = $failure->target()->value();
+
+                    Log::warning("Menghapus token invalid: {$invalidToken}");
+                    FcmToken::where('token', $invalidToken)->delete();
+                }
             } catch (MessagingException | FirebaseException $e) {
-                Log::error("Gagal mengirim notifikasi ke token {$token}: {$e->getMessage()}");
+                Log::error("Gagal mengirim notifikasi: {$e->getMessage()}");
             }
         }
 
