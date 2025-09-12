@@ -48,16 +48,15 @@ class EventController extends Controller
         foreach ($tokens as $token) {
             try {
                 $message = CloudMessage::new()
-                    ->withToken($token)
+                    ->toToken($token) // ✅ pengganti resmi
                     ->withNotification(Notification::create(
                         'Event Baru: ' . $event->nama_event,
                         $event->deskripsi ?? 'Ada event baru!'
                     ))
-                    ->withData(['event_id' => $event->id]);
+                    ->withData(['id' => (string) $event->id]);
 
                 app('firebase.messaging')->send($message);
             } catch (MessagingException | FirebaseException $e) {
-                // Log error agar bisa diketahui jika gagal
                 Log::error("Gagal mengirim notifikasi ke token {$token}: {$e->getMessage()}");
             }
         }
