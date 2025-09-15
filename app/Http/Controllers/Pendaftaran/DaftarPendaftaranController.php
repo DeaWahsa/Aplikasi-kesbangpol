@@ -127,17 +127,25 @@ class DaftarPendaftaranController extends Controller
         $dataQr = "Nama: {$pemohon->nama_kelompok}\nNIK Ketua Pengurus: {$pemohon->nik_ketua_pengurus}\nNomor Registrasi: {$pemohon->nomor_registrasi}";
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
 
+
+
         // Isi nilai
         $templateProcessor->setValue('no_surat_permohonan', $pemohon->no_surat_permohonan);
         $templateProcessor->setValue('tgl_surat_permohonan', $pemohon->tgl_surat_permohonan);
         $templateProcessor->setValue('hal_surat_permohonan', $pemohon->hal_surat_permohonan);
         $templateProcessor->setValue('nama_kelompok', $pemohon->nama_kelompok);
         $templateProcessor->setValue('bidang_kegiatan', $pemohon->bidang_kegiatan);
-        $templateProcessor->setValue('waktu_pendirian', $pemohon->waktu_pendirian);
+        $templateProcessor->setValue(
+            'waktu_pendirian',
+            Carbon::parse($pemohon->waktu_pendirian)->translatedFormat('d F Y')
+        );
         $templateProcessor->setValue('alamat_kantor', $pemohon->alamat_kantor);
         $templateProcessor->setValue('opd', $pemohon->opd);
         $templateProcessor->setValue('no_surat_dinas', $pemohon->no_surat_dinas);
-        $templateProcessor->setValue('tgl_surat_dinas', $pemohon->tgl_surat_dinas);
+        $templateProcessor->setValue(
+            'tgl_surat_dinas',
+            Carbon::parse($pemohon->tgl_surat_dinas)->translatedFormat('d F Y')
+        );
 
         // QR Code
         $qrPath = storage_path('app/public/qr_' . $pemohon->id . '.png');

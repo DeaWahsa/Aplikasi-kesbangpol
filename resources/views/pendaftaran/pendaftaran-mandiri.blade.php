@@ -196,38 +196,86 @@
             <!-- Step 1 -->
             <div class="step-content" id="step1">
                 <h4 class="mb-3 text-primary">📋 Data Kelompok</h4>
-                <div class="mb-3"><label class="form-label">Nama Kelompok</label><input type="text" class="form-control" name="nama_kelompok"></div>
-                <div class="mb-3"><label class="form-label">Nomor Surat Permohonan</label><input type="text" class="form-control" name="no_surat_permohonan"></div>
-                <div class="mb-3"><label class="form-label">Tanggal Surat Permohonan</label><input type="date" class="form-control" name="tgl_surat_permohonan"></div>
-                <div class="mb-3"><label class="form-label">Hal Surat Permohonan</label><input type="text" class="form-control" name="hal_surat_permohonan"></div>
-                <div class="mb-3"><label class="form-label">Nomor Surat Dinas</label><input type="text" class="form-control" name="no_surat_dinas"></div>
-                <div class="mb-3"><label class="form-label">Tanggal Surat Dinas</label><input type="date" class="form-control" name="tgl_surat_dinas"></div>
-                <div class="mb-3"><label class="form-label">Hal Surat Dinas</label><input type="text" class="form-control" name="hal_surat_dinas"></div>
-                <div class="mb-3"><label class="form-label">Bidang Kegiatan</label><input type="text" class="form-control" name="bidang_kegiatan"></div>
-                <div class="mb-3"><label class="form-label">Program Kerja</label><input type="text" class="form-control" name="program_kerja"></div>
-                <div class="mb-3"><label class="form-label">Alamat Kantor</label><input type="text" class="form-control" name="alamat_kantor"></div>
-                <div class="mb-3"><label class="form-label">Tempat Pendirian</label><input type="text" class="form-control" name="tempat_pendirian"></div>
-                <div class="mb-3"><label class="form-label">Waktu Pendirian</label><input type="date" class="form-control" name="waktu_pendirian"></div>
-                <div class="mb-3"><label class="form-label">Asas</label><input type="text" class="form-control" name="asas"></div>
-                <div class="mb-3"><label class="form-label">Tujuan Kelompok</label><input type="text" class="form-control" name="tujuan_kelompok"></div>
-                <button type="button" class="btn btn-primary float-end" onclick="nextStep()">Lanjut ➡️</button>
+                <div class="mb-3"><label class="form-label">Nama Kelompok</label><input type="text"
+                        class="form-control" name="nama_kelompok"></div>
+                <div class="mb-3"><label class="form-label">Nomor Surat Permohonan</label><input type="text"
+                        class="form-control" name="no_surat_permohonan"></div>
+                <div class="mb-3"><label class="form-label">Tanggal Surat Permohonan</label><input type="date"
+                        class="form-control" name="tgl_surat_permohonan"></div>
+                <div class="mb-3"><label class="form-label">Hal Surat Permohonan</label><input type="text"
+                        class="form-control" name="hal_surat_permohonan"></div>
+                <div class="mb-3"><label class="form-label">Nomor Surat Dinas</label><input type="text"
+                        class="form-control" name="no_surat_dinas"></div>
+                <div class="mb-3"><label class="form-label">Tanggal Surat Dinas</label><input type="date"
+                        class="form-control" name="tgl_surat_dinas"></div>
+                <div class="mb-3"><label class="form-label">Hal Surat Dinas</label><input type="text"
+                        class="form-control" name="hal_surat_dinas"></div>
+                <div class="mb-3"><label class="form-label">Bidang Kegiatan</label><input type="text"
+                        class="form-control" name="bidang_kegiatan"></div>
+                <div class="mb-3"><label class="form-label">Program Kerja</label><input type="text"
+                        class="form-control" name="program_kerja"></div>
+                <div class="mb-3"><label class="form-label">Alamat Kantor</label>
+                    <textarea class="form-control" name="alamat_kantor"></textarea>
+                </div>
+                <div class="mb-3"><label class="form-label">Tempat Pendirian</label><input type="text"
+                        class="form-control" name="tempat_pendirian"></div>
+                <div class="mb-3"><label class="form-label">Waktu Pendirian</label><input type="date"
+                        class="form-control" name="waktu_pendirian"></div>
+                <div class="mb-3"><label class="form-label">Asas</label><input type="text" class="form-control"
+                        name="asas"></div>
+                <div class="mb-3"><label class="form-label">Tujuan Kelompok</label><input type="text"
+                        class="form-control" name="tujuan_kelompok"></div>
+                <div class="d-flex justify-content-end mt-4">
+                    <button type="button" class="btn btn-primary" onclick="nextStep()">Lanjut ➡️</button>
+                </div>
             </div>
 
             <!-- Step 2 -->
             <div class="step-content d-none" id="step2">
                 <h4 class="mb-3 text-success">👥 Data Pendiri & Pembina</h4>
-                <div class="mb-3"><label class="form-label">Nama Pendiri</label><input type="text" class="form-control" name="nama_pendiri"></div>
-                <div class="mb-3"><label class="form-label">NIK Pendiri</label><input type="text" class="form-control" name="nik_pendiri"></div>
-                <div class="mb-3"><label class="form-label">Agama Pendiri</label><input type="text" class="form-control" name="agama_pendiri"></div>
-                <div class="mb-3"><label class="form-label">Jenis Kelamin Pendiri</label><input type="text" class="form-control" name="jk_pendiri"></div>
-                <div class="mb-3"><label class="form-label">Tempat Lahir Pendiri</label><input type="text" class="form-control" name="tl_pendiri"></div>
-                <div class="mb-3"><label class="form-label">Tanggal Lahir Pendiri</label><input type="date" class="form-control" name="tgll_pendiri"></div>
-                <div class="mb-3"><label class="form-label">Status Kawin</label><input type="text" class="form-control" name="status_kawin_pendiri"></div>
-                <div class="mb-3"><label class="form-label">Alamat Pendiri</label><textarea class="form-control" name="alamat_pendiri"></textarea></div>
-                <div class="mb-3"><label class="form-label">No HP Pendiri</label><input type="text" class="form-control" name="hp_pendiri"></div>
-                <div class="mb-3"><label class="form-label">Pekerjaan Pendiri</label><input type="text" class="form-control" name="pekerjaan_pendiri"></div>
-                <div class="mb-3"><label class="form-label">Nama Pembina</label><input type="text" class="form-control" name="nama_pembina"></div>
-                <div class="mb-3"><label class="form-label">Nama Penasehat</label><input type="text" class="form-control" name="nama_penasehat"></div>
+                <div class="mb-3"><label class="form-label">Nama Pendiri</label><input type="text"
+                        class="form-control" name="nama_pendiri"></div>
+                <div class="mb-3"><label class="form-label">NIK Pendiri</label><input type="text"
+                        name="nik_pendiri" class="form-control" maxlength="16" pattern="[0-9]*"
+                        oninput="this.value=this.value.replace(/[^0-9]/g,'');"></div>
+                <div class="mb-3"><label class="form-label">Agama Pendiri</label><select name="agama_pendiri"
+                        class="form-control">
+                        <option value="">-- Pilih Agama --</option>
+                        <option value="1">Islam</option>
+                        <option value="2">Kristen</option>
+                        <option value="3">Katolik</option>
+                        <option value="4">Hindu</option>
+                        <option value="5">Buddha</option>
+                        <option value="6">Konghucu</option>
+                    </select></div>
+                <div class="mb-3"><label class="form-label">Jenis Kelamin Pendiri</label><select name="jk_pendiri"
+                        class="form-control">
+                        <option value="">-- Pilih Jenis Kelamin --</option>
+                        <option value="1">Laki-laki</option>
+                        <option value="2">Perempuan</option>
+                    </select></div>
+                <div class="mb-3"><label class="form-label">Tempat Lahir Pendiri</label><input type="text"
+                        class="form-control" name="tl_pendiri"></div>
+                <div class="mb-3"><label class="form-label">Tanggal Lahir Pendiri</label><input type="date"
+                        class="form-control" name="tgll_pendiri"></div>
+                <div class="mb-3"><label class="form-label">Status Kawin</label><select name="status_kawin_pendiri"
+                        class="form-control">
+                        <option value="">-- Pilih Status --</option>
+                        <option value="1">Belum Kawin</option>
+                        <option value="2">Kawin</option>
+                    </select></div>
+                <div class="mb-3"><label class="form-label">Alamat Pendiri</label>
+                    <textarea class="form-control" name="alamat_pendiri"></textarea>
+                </div>
+                <div class="mb-3"><label class="form-label">No HP Pendiri</label><input type="text"
+                        name="hp_pendiri" class="form-control" maxlength="16" pattern="[0-9]*"
+                        oninput="this.value=this.value.replace(/[^0-9]/g,'');"></div>
+                <div class="mb-3"><label class="form-label">Pekerjaan Pendiri</label><input type="text"
+                        class="form-control" name="pekerjaan_pendiri"></div>
+                <div class="mb-3"><label class="form-label">Nama Pembina</label><input type="text"
+                        class="form-control" name="nama_pembina"></div>
+                <div class="mb-3"><label class="form-label">Nama Penasehat</label><input type="text"
+                        class="form-control" name="nama_penasehat"></div>
                 <button type="button" class="btn btn-secondary" onclick="prevStep()">⬅️ Kembali</button>
                 <button type="button" class="btn btn-primary float-end" onclick="nextStep()">Lanjut ➡️</button>
             </div>
@@ -236,42 +284,129 @@
             <div class="step-content d-none" id="step3">
                 <h4 class="mb-3 text-warning">👔 Data Pengurus</h4>
                 <!-- Ketua -->
-                <div class="mb-3"><label class="form-label">Nama Ketua</label><input type="text" class="form-control" name="nama_ketua_pengurus"></div>
-                <div class="mb-3"><label class="form-label">NIK Ketua</label><input type="text" class="form-control" name="nik_ketua_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Agama Ketua</label><input type="text" class="form-control" name="agama_ketua_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Jenis Kelamin Ketua</label><input type="text" class="form-control" name="jk_ketua_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Tempat Lahir Ketua</label><input type="text" class="form-control" name="tl_ketua_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Tanggal Lahir Ketua</label><input type="date" class="form-control" name="tgll_ketua_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Status Kawin Ketua</label><input type="text" class="form-control" name="status_kawin_ketua_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Alamat Ketua</label><input type="text" class="form-control" name="alamat_ketua_pengurus"></div>
-                <div class="mb-3"><label class="form-label">No HP Ketua</label><input type="text" class="form-control" name="hp_ketua_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Pekerjaan Ketua</label><input type="text" class="form-control" name="pekerjaan_ketua_pengurus"></div>
+                <div class="mb-3"><label class="form-label">Nama Ketua</label><input type="text"
+                        class="form-control" name="nama_ketua_pengurus"></div>
+                <div class="mb-3"><label class="form-label">NIK Ketua</label><input type="text"
+                        name="nik_ketua_pengurus" class="form-control" maxlength="16" pattern="[0-9]*"
+                        oninput="this.value=this.value.replace(/[^0-9]/g,'');"></div>
+                <div class="mb-3"><label class="form-label">Agama Ketua</label><select name="agama_ketua_pengurus"
+                        class="form-control">
+                        <option value="">-- Pilih Agama --</option>
+                        <option value="1">Islam</option>
+                        <option value="2">Kristen</option>
+                        <option value="3">Katolik</option>
+                        <option value="4">Hindu</option>
+                        <option value="5">Buddha</option>
+                        <option value="6">Konghucu</option>
+                    </select></div>
+                <div class="mb-3"><label class="form-label">Jenis Kelamin Ketua</label><select
+                        name="jk_ketua_pengurus" class="form-control">
+                        <option value="">-- Pilih Jenis Kelamin --</option>
+                        <option value="1">Laki-laki</option>
+                        <option value="2">Perempuan</option>
+                    </select></div>
+                <div class="mb-3"><label class="form-label">Tempat Lahir Ketua</label><input type="text"
+                        class="form-control" name="tl_ketua_pengurus"></div>
+                <div class="mb-3"><label class="form-label">Tanggal Lahir Ketua</label><input type="date"
+                        class="form-control" name="tgll_ketua_pengurus"></div>
+                <div class="mb-3"><label class="form-label">Status Kawin Ketua</label><select
+                        name="status_kawin_ketua_pengurus" class="form-control">
+                        <option value="">-- Pilih Status --</option>
+                        <option value="1">Belum Kawin</option>
+                        <option value="2">Kawin</option>
+                    </select></div>
+                <div class="mb-3"><label class="form-label">Alamat Ketua</label>
+                    <textarea class="form-control" name="alamat_ketua_pengurus"></textarea>
+                </div>
+                <div class="mb-3"><label class="form-label">No HP Ketua</label><input type="text"
+                        name="hp_ketua_pengurus" class="form-control" maxlength="16" pattern="[0-9]*"
+                        oninput="this.value=this.value.replace(/[^0-9]/g,'');"></div>
+                <div class="mb-3"><label class="form-label">Pekerjaan Ketua</label><input type="text"
+                        class="form-control" name="pekerjaan_ketua_pengurus"></div>
 
                 <!-- Sekretaris -->
                 <hr>
-                <div class="mb-3"><label class="form-label">Nama Sekretaris</label><input type="text" class="form-control" name="nama_sekretaris_pengurus"></div>
-                <div class="mb-3"><label class="form-label">NIK Sekretaris</label><input type="text" class="form-control" name="nik_sekretaris_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Agama Sekretaris</label><input type="text" class="form-control" name="agama_sekretaris_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Jenis Kelamin Sekretaris</label><input type="text" class="form-control" name="jk_sekretaris_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Tempat Lahir Sekretaris</label><input type="text" class="form-control" name="tl_sekretaris_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Tanggal Lahir Sekretaris</label><input type="date" class="form-control" name="tgll_sekretaris_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Status Kawin Sekretaris</label><input type="text" class="form-control" name="status_kawin_sekretaris_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Alamat Sekretaris</label><input type="text" class="form-control" name="alamat_sekretaris_pengurus"></div>
-                <div class="mb-3"><label class="form-label">No HP Sekretaris</label><input type="text" class="form-control" name="hp_sekretaris_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Pekerjaan Sekretaris</label><input type="text" class="form-control" name="pekerjaan_sekretaris_pengurus"></div>
+                <div class="mb-3"><label class="form-label">Nama Sekretaris</label><input type="text"
+                        class="form-control" name="nama_sekretaris_pengurus"></div>
+                <div class="mb-3"><label class="form-label">NIK Sekretaris</label><input type="text"
+                        name="nik_sekretaris_pengurus" class="form-control" maxlength="16" pattern="[0-9]*"
+                        oninput="this.value=this.value.replace(/[^0-9]/g,'');"></div>
+                <div class="mb-3"><label class="form-label">Agama Sekretaris</label><select
+                        name="agama_sekretaris_pengurus" class="form-control">
+                        <option value="">-- Pilih Agama --</option>
+                        <option value="1">Islam</option>
+                        <option value="2">Kristen</option>
+                        <option value="3">Katolik</option>
+                        <option value="4">Hindu</option>
+                        <option value="5">Buddha</option>
+                        <option value="6">Konghucu</option>
+                    </select></div>
+                <div class="mb-3"><label class="form-label">Jenis Kelamin Sekretaris</label><select
+                        name="jk_sekretaris_pengurus" class="form-control">
+                        <option value="">-- Pilih Jenis Kelamin --</option>
+                        <option value="1">Laki-laki</option>
+                        <option value="2">Perempuan</option>
+                    </select></div>
+                <div class="mb-3"><label class="form-label">Tempat Lahir Sekretaris</label><input type="text"
+                        class="form-control" name="tl_sekretaris_pengurus"></div>
+                <div class="mb-3"><label class="form-label">Tanggal Lahir Sekretaris</label><input type="date"
+                        class="form-control" name="tgll_sekretaris_pengurus"></div>
+                <div class="mb-3"><label class="form-label">Status Kawin Sekretaris</label><select
+                        name="status_kawin_sekretaris_pengurus" class="form-control">
+                        <option value="">-- Pilih Status --</option>
+                        <option value="1">Belum Kawin</option>
+                        <option value="2">Kawin</option>
+                    </select></div>
+                <div class="mb-3"><label class="form-label">Alamat Sekretaris</label>
+                    <textarea class="form-control" name="alamat_sekretaris_pengurus"></textarea>
+                </div>
+                <div class="mb-3"><label class="form-label">No HP Sekretaris</label><input type="text"
+                        name="hp_sekretaris_pengurus" class="form-control" maxlength="16" pattern="[0-9]*"
+                        oninput="this.value=this.value.replace(/[^0-9]/g,'');"></div>
+                <div class="mb-3"><label class="form-label">Pekerjaan Sekretaris</label><input type="text"
+                        class="form-control" name="pekerjaan_sekretaris_pengurus"></div>
 
                 <!-- Bendahara -->
                 <hr>
-                <div class="mb-3"><label class="form-label">Nama Bendahara</label><input type="text" class="form-control" name="nama_bendahara_pengurus"></div>
-                <div class="mb-3"><label class="form-label">NIK Bendahara</label><input type="text" class="form-control" name="nik_bendahara_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Agama Bendahara</label><input type="text" class="form-control" name="agama_bendahara_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Jenis Kelamin Bendahara</label><input type="text" class="form-control" name="jk_bendahara_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Tempat Lahir Bendahara</label><input type="text" class="form-control" name="tl_bendahara_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Tanggal Lahir Bendahara</label><input type="date" class="form-control" name="tgll_bendahara_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Status Kawin Bendahara</label><input type="text" class="form-control" name="status_kawin_bendahara_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Alamat Bendahara</label><input type="text" class="form-control" name="alamat_bendahara_pengurus"></div>
-                <div class="mb-3"><label class="form-label">No HP Bendahara</label><input type="text" class="form-control" name="hp_bendahara_pengurus"></div>
-                <div class="mb-3"><label class="form-label">Pekerjaan Bendahara</label><input type="text" class="form-control" name="pekerjaan_bendahara_pengurus"></div>
+                <div class="mb-3"><label class="form-label">Nama Bendahara</label><input type="text"
+                        class="form-control" name="nama_bendahara_pengurus"></div>
+                <div class="mb-3"><label class="form-label">NIK Bendahara</label><input type="text"
+                        name="nik_bendahara_pengurus" class="form-control" maxlength="16" pattern="[0-9]*"
+                        oninput="this.value=this.value.replace(/[^0-9]/g,'');"></div>
+                <div class="mb-3"><label class="form-label">Agama Bendahara</label><select
+                        name="agama_bendahara_pengurus" class="form-control">
+                        <option value="">-- Pilih Agama --</option>
+                        <option value="1">Islam</option>
+                        <option value="2">Kristen</option>
+                        <option value="3">Katolik</option>
+                        <option value="4">Hindu</option>
+                        <option value="5">Buddha</option>
+                        <option value="6">Konghucu</option>
+                    </select></div>
+                <div class="mb-3"><label class="form-label">Jenis Kelamin Bendahara</label><select
+                        name="jk_bendahara_pengurus" class="form-control">
+                        <option value="">-- Pilih Jenis Kelamin --</option>
+                        <option value="1">Laki-laki</option>
+                        <option value="2">Perempuan</option>
+                    </select></div>
+                <div class="mb-3"><label class="form-label">Tempat Lahir Bendahara</label><input type="text"
+                        class="form-control" name="tl_bendahara_pengurus"></div>
+                <div class="mb-3"><label class="form-label">Tanggal Lahir Bendahara</label><input type="date"
+                        class="form-control" name="tgll_bendahara_pengurus"></div>
+                <div class="mb-3"><label class="form-label">Status Kawin Bendahara</label><select
+                        name="status_kawin_bendahara_pengurus" class="form-control">
+                        <option value="">-- Pilih Status --</option>
+                        <option value="1">Belum Kawin</option>
+                        <option value="2">Kawin</option>
+                    </select></div>
+                <div class="mb-3"><label class="form-label">Alamat Bendahara</label>
+                    <textarea class="form-control" name="alamat_bendahara_pengurus"></textarea>
+                </div>
+                <div class="mb-3"><label class="form-label">No HP Bendahara</label><input type="text"
+                        name="hp_bendahara_pengurus" class="form-control" maxlength="16" pattern="[0-9]*"
+                        oninput="this.value=this.value.replace(/[^0-9]/g,'');"></div>
+                <div class="mb-3"><label class="form-label">Pekerjaan Bendahara</label><input type="text"
+                        class="form-control" name="pekerjaan_bendahara_pengurus"></div>
 
                 <div class="d-flex justify-content-between mt-4">
                     <button type="button" class="btn btn-secondary" onclick="prevStep()">⬅️ Kembali</button>
@@ -282,13 +417,35 @@
             <!-- Step 4 -->
             <div class="step-content d-none" id="step4">
                 <h4 class="mb-3 text-info">📑 Data Administrasi</h4>
-                <div class="mb-3"><label class="form-label">Kecamatan</label><input type="text" class="form-control" name="kecamatan"></div>
-                <div class="mb-3"><label class="form-label">Desa</label><input type="text" class="form-control" name="desa"></div>
-                <div class="mb-3"><label class="form-label">Jenis Kelompok</label><input type="text" class="form-control" name="id_jenis"></div>
-                <div class="mb-3"><label class="form-label">Masa Kepengurusan</label><input type="text" class="form-control" name="masa_kepengurusan"></div>
-                <div class="mb-3"><label class="form-label">Keputusan Kelompok</label><input type="text" class="form-control" name="keputusan_kelompok"></div>
-                <div class="mb-3"><label class="form-label">Sumber Keuangan</label><input type="text" class="form-control" name="sumber_keuangan"></div>
-                <div class="mb-3"><label class="form-label">Upload Logo</label><input type="file" class="form-control" name="logo_kelompok"></div>
+                <div class="mb-3"><label class="form-label">Kecamatan</label><select id="kecamatan"
+                        name="id_kecamatan" class="form-select">
+                        <option value="">-- Pilih Kecamatan --</option>
+                        @foreach ($kecamatan as $u)
+                            <option value="{{ $u->id }}">{{ $u->nama_kecamatan }}</option>
+                        @endforeach
+                    </select></div>
+                <div class="mb-3"><label class="form-label">Desa</label><select id="desa" name="id_desa"
+                        class="form-select">
+                        <option value="">-- Pilih Desa --</option>
+                        @foreach ($desa as $u)
+                            <option value="{{ $u->id }}">{{ $u->nama_desa }}</option>
+                        @endforeach
+                    </select></div>
+                <div class="mb-3"><label class="form-label">Jenis Kelompok</label><select id="jenis"
+                        name="id_jenis" class="form-select">
+                        <option value="">-- Pilih Jenis Kelompok --</option>
+                        @foreach ($jenisKelompok as $u)
+                            <option value="{{ $u->id }}">{{ $u->nama_jenis_kelompok }}</option>
+                        @endforeach
+                    </select></div>
+                <div class="mb-3"><label class="form-label">Masa Kepengurusan</label><input type="text"
+                        class="form-control" name="masa_kepengurusan"></div>
+                <div class="mb-3"><label class="form-label">Keputusan Kelompok</label><input type="text"
+                        class="form-control" name="keputusan_kelompok"></div>
+                <div class="mb-3"><label class="form-label">Sumber Keuangan</label><input type="text"
+                        class="form-control" name="sumber_keuangan"></div>
+                <div class="mb-3"><label class="form-label">Upload Logo</label><input type="file"
+                        class="form-control" name="logo_kelompok"></div>
                 <button type="button" class="btn btn-secondary" onclick="prevStep()">⬅️ Kembali</button>
                 <button type="button" class="btn btn-primary float-end" onclick="nextStep()">Lanjut ➡️</button>
             </div>
@@ -296,11 +453,11 @@
             <!-- Step 5 -->
             <div class="step-content d-none" id="step5">
                 <h4 class="mb-3 text-danger">📂 Upload Persyaratan</h4>
-                @foreach($persyaratan as $u)
-                <div class="mb-3">
-                    <label class="form-label">{{ $u->nama_persyaratan }}</label>
-                    <input type="file" class="form-control" name="persyaratan[{{ $u->id }}]">
-                </div>
+                @foreach ($persyaratan as $u)
+                    <div class="mb-3">
+                        <label class="form-label">{{ $u->nama_persyaratan }}</label>
+                        <input type="file" class="form-control" name="persyaratan[{{ $u->id }}]">
+                    </div>
                 @endforeach
 
                 <button type="button" class="btn btn-secondary" onclick="prevStep()">⬅️ Kembali</button>
@@ -334,36 +491,69 @@
     </script>
     <script>
         let currentStep = 1;
-
-        function updateProgressBar() {
-            const progressBar = document.getElementById('progressBar');
-            const steps = document.querySelectorAll('.step');
-            steps.forEach((s, i) => {
-                s.classList.remove('active', 'completed');
-                if (i < currentStep - 1) s.classList.add('completed');
-                if (i === currentStep - 1) s.classList.add('active');
-            });
-            progressBar.style.width = ((currentStep - 1) / (steps.length - 1)) * 100 + "%";
-        }
+        const totalSteps = 5;
 
         function nextStep() {
-            if (currentStep < 5) {
-                document.getElementById('step' + currentStep).classList.add('d-none');
-                currentStep++;
-                document.getElementById('step' + currentStep).classList.remove('d-none');
-                updateProgressBar();
+            // Ambil step aktif
+            const stepContent = document.getElementById(`step${currentStep}`);
+            const inputs = stepContent.querySelectorAll("input, select, textarea");
+
+            let valid = true;
+
+            // Reset pesan error
+            stepContent.querySelectorAll(".text-danger").forEach(el => el.remove());
+
+            inputs.forEach(input => {
+                if (input.type !== "hidden" && input.value.trim() === "") {
+                    valid = false;
+
+                    // Kasih pesan error kalau belum ada
+                    if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("text-danger")) {
+                        let error = document.createElement("div");
+                        error.classList.add("text-danger", "mt-1");
+                        error.innerText = "Kolom ini harus diisi!";
+                        input.insertAdjacentElement("afterend", error);
+                    }
+                }
+            });
+
+            if (!valid) {
+                return; // stop kalau ada kolom kosong
             }
+
+            // Kalau valid baru pindah step
+            document.getElementById(`step${currentStep}`).classList.add("d-none");
+            currentStep++;
+            document.getElementById(`step${currentStep}`).classList.remove("d-none");
+
+            updateStepIndicator();
         }
 
         function prevStep() {
-            if (currentStep > 1) {
-                document.getElementById('step' + currentStep).classList.add('d-none');
-                currentStep--;
-                document.getElementById('step' + currentStep).classList.remove('d-none');
-                updateProgressBar();
-            }
+            document.getElementById(`step${currentStep}`).classList.add("d-none");
+            currentStep--;
+            document.getElementById(`step${currentStep}`).classList.remove("d-none");
+
+            updateStepIndicator();
         }
-        updateProgressBar();
+
+        function updateStepIndicator() {
+            const steps = document.querySelectorAll(".step");
+            const progressBar = document.getElementById("progressBar");
+            steps.forEach((step, index) => {
+                if (index < currentStep - 1) {
+                    step.classList.add("completed");
+                    step.classList.remove("active");
+                } else if (index === currentStep - 1) {
+                    step.classList.add("active");
+                    step.classList.remove("completed");
+                } else {
+                    step.classList.remove("active", "completed");
+                }
+            });
+
+            progressBar.style.width = ((currentStep - 1) / (totalSteps - 1)) * 100 + "%";
+        }
 
         $('#formPendaftaran').on('submit', function(e) {
             e.preventDefault();
