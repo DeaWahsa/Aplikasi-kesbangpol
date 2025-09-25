@@ -612,6 +612,29 @@
                 }
             });
         });
+
+        $('#kecamatan').on('change', function() {
+            var kecamatan_id = $(this).val();
+
+            if (kecamatan_id) {
+                $.ajax({
+                    url: "{{ url('get-desa') }}/" + kecamatan_id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#desa').empty();
+                        $('#desa').append('<option value="">-- Pilih Desa --</option>');
+                        $.each(data, function(key, desa) {
+                            $('#desa').append('<option value="' + desa.id + '">' + desa
+                                .nama_desa + '</option>');
+                        });
+                    }
+                });
+            } else {
+                $('#desa').empty();
+                $('#desa').append('<option value="">-- Pilih Desa --</option>');
+            }
+        });
     </script>
 </body>
 

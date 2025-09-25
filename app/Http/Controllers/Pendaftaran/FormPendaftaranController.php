@@ -38,15 +38,15 @@ class FormPendaftaranController extends Controller
     }
 
 
-    public function getKecamatan($kecamatan_id)
-    {
-        $kecamatan = M_desa::where('kecamatan_id', $kecamatan_id)->get();
-        return response()->json($kecamatan);
-    }
+    // public function getKecamatan($kecamatan_id)
+    // {
+    //     $kecamatan = M_desa::where('kecamatan_id', $kecamatan_id)->get();
+    //     return response()->json($kecamatan);
+    // }
 
-    public function getDesa($desa_id)
+    public function getDesa($kecamatan_id)
     {
-        $desa = M_desa::where('desa_id', $desa_id)->get();
+        $desa = M_desa::where('kecamatan_id', $kecamatan_id)->get();
         return response()->json($desa);
     }
 

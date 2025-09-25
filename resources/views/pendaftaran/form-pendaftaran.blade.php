@@ -549,8 +549,8 @@
                                 <select id="desa" name="id_desa" class="form-select">
                                     <option value="">-- Pilih Desa --</option>
                                     @foreach ($desa as $u)
-                                <option value="{{$u->id}}">{{$u->nama_desa}}</option>
-                                @endforeach
+                                        <option value="{{ $u->id }}">{{ $u->nama_desa }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -666,11 +666,11 @@
         });
 
         $('#kecamatan').on('change', function() {
-            var kecamatanID = $(this).val();
+            var kecamatan_id = $(this).val();
 
-            if (kecamatanID) {
+            if (kecamatan_id) {
                 $.ajax({
-                    url: "{{ url('get-desa') }}/" + kecamatanID,
+                    url: "{{ url('get-desa') }}/" + kecamatan_id,
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
