@@ -9,7 +9,9 @@ use App\Http\Controllers\MasterData\PersyaratanController;
 use App\Http\Controllers\Pendaftaran\DaftarPendaftaranController;
 use App\Http\Controllers\Pendaftaran\FormPendaftaranController;
 use App\Http\Controllers\PendaftaranMandiriController;
+use App\Models\RevaerToken;
 use Faker\Core\File;
+use GuzzleHttp\Client;
 use Kreait\Firebase\Factory;
 
 /*
@@ -79,8 +81,26 @@ Route::get('/test-firebase3', function () {
 });
 Route::get('/pendaftaran-mandiri', [PendaftaranMandiriController::class, 'index'])->name('pendaftaranMandiri.index');
 Route::post('/pendaftaran/store', [PendaftaranMandiriController::class, 'store'])->name('pendaftaranMandiri.store');
-Route::get('/test-notif', function () {
-    event(new SendNotification("Halo Flutter", "Ini notifikasi real-time dari Laravel Reverb"));
-    return "Notifikasi terkirim!";
+Route::get('/test-notification', function () {
+    $title = "Event Baru";
+    $body = "Halo dari Laravel!";
+
+    // 🔹 Broadcast realtime (Pusher)
+    event(new SendNotification($title, $body));
+
+    // 🔹 Kirim push notification Revaer
+    $tokens = RevaerToken::pluck('token')->toArray();
+    $client = new Client();
+    $client->post('https://api.revaer.com/send', [
+        'json' => [
+            'app_id' => env('REVAER_APP_ID'),
+            'api_key' => env('REVAER_API_KEY'),
+            'tokens' => $tokens,
+            'title' => $title,
+            'message' => $body,
+        ],
+    ]);
+
+    return 'Notifikasi dikirim';
 });
 

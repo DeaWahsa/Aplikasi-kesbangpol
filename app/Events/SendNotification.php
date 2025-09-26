@@ -1,5 +1,6 @@
 <?php
 
+// app/Events/SendNotification.php
 namespace App\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -21,11 +22,11 @@ class SendNotification implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return ['notification-channel']; // channel public
+        return ['notification-channel'];
     }
 
     public function broadcastAs()
     {
-        return 'notification.sent'; // nama event di Flutter
+        return 'notification.sent';
     }
 }
