@@ -56,51 +56,32 @@ Route::middleware(['auth'])->group(function () {
   Route::post('/verifikasi-persyaratan/{id}', [FilePersyaratanController::class, 'verifikasi']);
 
   Route::get('/cetak-pemohon/{id}', [DaftarPendaftaranController::class, 'cetak_pemohon'])->name('cetakPemohon');
-   
+
   Route::get('/events', [EventController::class, 'index'])->name('events.index'); // daftar event
   Route::get('/events/create', [EventController::class, 'create'])->name('events.create'); // form tambah event
   Route::post('/events', [EventController::class, 'store'])->name('events.store'); // simpan event + kirim notifikasi
   Route::get('/test-firebase', function () {
     $path = env('FIREBASE_CREDENTIALS');
     if (file_exists($path)) {
-        return response()->json(['status' => 'ok', 'file_size' => filesize($path)]);
+      return response()->json(['status' => 'ok', 'file_size' => filesize($path)]);
     }
     return response()->json(['status' => 'not found']);
-});
+  });
 
-Route::get('/test-firebase3', function () {
+  Route::get('/test-firebase3', function () {
     try {
-        $factory = (new Factory)->withServiceAccount(env('FIREBASE_CREDENTIALS'));
-        $messaging = $factory->createMessaging();
-        return response()->json(['status' => 'Firebase connected']);
+      $factory = (new Factory)->withServiceAccount(env('FIREBASE_CREDENTIALS'));
+      $messaging = $factory->createMessaging();
+      return response()->json(['status' => 'Firebase connected']);
     } catch (\Throwable $e) {
-        return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+      return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
     }
-});
-
+  });
 });
 Route::get('/pendaftaran-mandiri', [PendaftaranMandiriController::class, 'index'])->name('pendaftaranMandiri.index');
+Route::get('/get-desa/{kecamatan_id}', [PendaftaranMandiriController::class, 'getDesa']);
 Route::post('/pendaftaran/store', [PendaftaranMandiriController::class, 'store'])->name('pendaftaranMandiri.store');
-Route::get('/test-notification', function () {
-    $title = "Event Baru";
-    $body = "Halo dari Laravel!";
-
-    // 🔹 Broadcast realtime (Pusher)
-    event(new SendNotification($title, $body));
-
-    // 🔹 Kirim push notification Revaer
-    $tokens = RevaerToken::pluck('token')->toArray();
-    $client = new Client();
-    $client->post('https://api.revaer.com/send', [
-        'json' => [
-            'app_id' => env('REVAER_APP_ID'),
-            'api_key' => env('REVAER_API_KEY'),
-            'tokens' => $tokens,
-            'title' => $title,
-            'message' => $body,
-        ],
-    ]);
-
-    return 'Notifikasi dikirim';
+Route::get('/test-notif', function () {
+    event(new SendNotification("Halo Flutter", "Ini notifikasi real-time dari Laravel Reverb"));
+    return "Notifikasi terkirim!";
 });
-
